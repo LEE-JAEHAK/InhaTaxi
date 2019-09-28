@@ -19,8 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
+        android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -29,15 +29,18 @@
             android:name=".activities.SchoolCertificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
-            android:usesCleartextTraffic="true">
+            android:usesCleartextTraffic="true"/>
+
+
+        <activity android:name=".activities.MapSearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MapSearchActivity"></activity>
         <activity android:name=".activities.GoogleCloudeVisionActivity" />
+        <activity android:name=".activities.chat_room.ChatRoomActivity" />
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.MainActivity"></activity>
         <activity
@@ -69,5 +72,4 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-
 </manifest>
