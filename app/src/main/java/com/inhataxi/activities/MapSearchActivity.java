@@ -52,7 +52,7 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
     private ImageView backTv;
     private EditText searchEt;
     private ImageView searchTv;
-    private TextView presentTv;
+    private TextView presentTv, logoTv;
     private ListView listView;
     public ListView listview;
     public MapAdapter adapter;
@@ -61,12 +61,13 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
     private LocationManager locationManager;
     private static final int REQUEST_CODE_LOCATION=2;
     private Activity activity;
+    int state=0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_search);
 
-        getHashKey();
+//        getHashKey();
 
         context = this;
         activity = this;
@@ -76,6 +77,7 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
         searchTv = findViewById(R.id.map_search_finish_tv);
         presentTv = findViewById(R.id.map_search_present_tv);
         listView = findViewById(R.id.map_search_list_view);
+        logoTv = findViewById(R.id.map_search_logo_tv);
 
         backTv.setOnClickListener(this);
         searchTv.setOnClickListener(this);
@@ -84,6 +86,15 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
         listview = findViewById(R.id.map_search_list_view);
         adapter = new MapAdapter(this);
         listView.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        state = intent.getIntExtra("select", 1);
+        if(state ==1) {
+            logoTv.setText("출발지를 선택하세요");
+        }
+        else if(state ==2){
+            logoTv.setText("목적지를 선택하세요");
+        }
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -100,6 +111,7 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
                 intent.putExtra("address", address);
                 intent.putExtra("x", x);
                 intent.putExtra("y", y);
+                intent.putExtra("select",state);
                 startActivity(intent);
                 finish();
             }
@@ -107,26 +119,26 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
         //Send ListView Item information to MapResultActivity Class
     }
 
-    private void getHashKey(){
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo == null)
-            Log.e("KeyHash", "KeyHash:null");
-
-        for (Signature signature : packageInfo.signatures) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            } catch (NoSuchAlgorithmException e) {
-                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
-            }
-        }
-    }
+//    private void getHashKey(){
+//        PackageInfo packageInfo = null;
+//        try {
+//            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        if (packageInfo == null)
+//            Log.e("KeyHash", "KeyHash:null");
+//
+//        for (Signature signature : packageInfo.signatures) {
+//            try {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            } catch (NoSuchAlgorithmException e) {
+//                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+//            }
+//        }
+//    }
 
 
     @Override
@@ -170,6 +182,7 @@ public class MapSearchActivity extends AppCompatActivity implements View.OnClick
                     intent.putExtra("x", latitude);
                     intent.putExtra("y", longitude);
                     Log.i("HELOOWFDS", String.valueOf(latitude));
+                    intent.putExtra("select", state);
                     startActivity(intent);
                     finish();
                 }

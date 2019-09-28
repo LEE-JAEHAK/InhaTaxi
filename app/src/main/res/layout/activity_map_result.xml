@@ -7,30 +7,30 @@
     >
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="wrap_content"
+        android:paddingTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:paddingBottom="20dp">
         <ImageView
             android:id="@+id/map_result_back_tv"
-            android:layout_marginLeft="20dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/back_icon"
             android:layout_gravity="center_vertical"
             />
         <TextView
+            android:id="@+id/map_result_logo_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
             android:gravity="center_horizontal"
             android:textSize="18sp"
-            android:text="배달 받을 주소"
+            android:text="상세 주소"
             android:textColor="#323232"
             />
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></LinearLayout>
 
     <FrameLayout
         android:id="@+id/map_show"
@@ -45,7 +45,7 @@
             android:layout_gravity="center_horizontal |center_vertical"/>
     </FrameLayout>
     <LinearLayout
-        android:layout_width="312dp"
+        android:layout_width="match_parent"
         android:layout_height="206dp"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
@@ -55,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="43dp"
             android:gravity="center_vertical"
+            android:layout_marginLeft="25dp"
             android:layout_marginTop="16dp"
             android:textSize="18sp"
             android:textColor="#323232"
@@ -65,6 +66,8 @@
             android:layout_width="match_parent"
             android:paddingLeft="10dp"
             android:layout_height="48dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:textColorHint="#323232"
             android:includeFontPadding="false"
             android:textSize="20dp"
@@ -76,6 +79,8 @@
             android:background="#1ad2d2"
             android:text="완료"
             android:textColor="#ffffff"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:textSize="18sp"
             android:gravity="center_horizontal|center_vertical"
             android:layout_height="48dp" />
