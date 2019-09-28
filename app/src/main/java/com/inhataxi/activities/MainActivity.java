@@ -1,5 +1,6 @@
 package com.inhataxi.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -17,11 +18,16 @@ import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.demono.AutoScrollViewPager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+//import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.inhataxi.R;
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private View mDrawerView;
 
-    double latitude,longitude;
+    double latitude, longitude;
 
     private LocationManager locationManager;
 
@@ -76,15 +82,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = getWindow().getDecorView();
-        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
         }
+
+
         setContentView(R.layout.activity_main);
         init();
 
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        getMyLocation();
+//        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 //        getMyLocation();
         mArrayListMainEventBanner.add(new MainEventBanner("다문화융합연구소“글로컬다문화교육포럼 국내학자 초청특강” 개최", "http://www.inha.ac.kr/CrossEditor/binary/images/000006/%EB%8B%A4%EB%AC%B8%ED%99%94.jpg", "http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMzAyJTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
         mArrayListMainEventBanner.add(new MainEventBanner("인천 섬으로 떠나는 봉사활동 ‘섬 프로젝트’ 본격 가동","http://www.inha.ac.kr/CrossEditor/binary/images/000006/%EC%82%AC%EC%A7%84_2.jpg","http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMjkxJTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
@@ -118,15 +128,14 @@ public class MainActivity extends AppCompatActivity {
         mAutoViewPagerEventBanner = findViewById(R.id.home_vp_event_banner);
     }
 
-    private void getMyLocation(){
+    private void getMyLocation() {
         Location currentLocation = null;
         // Register the listener with the Location Manager to receive location updates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("////////////사용자에게 권한을 요청해야함");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.REQUEST_CODE_LOCATION);
             getMyLocation(); //이건 써도되고 안써도 되지만, 전 권한 승인하면 즉시 위치값 받아오려고 썼습니다!
-        }
-        else {
+        } else {
             System.out.println("////////////권한요청 안해도됨");
 
             // 수동으로 위치 구하기
@@ -137,14 +146,14 @@ public class MainActivity extends AppCompatActivity {
 //                double lat = currentLocation.getLatitude();
 
                 Location userLocation = currentLocation;
-                if(userLocation!=null){
+                if (userLocation != null) {
                     latitude = userLocation.getLatitude();
                     longitude = userLocation.getLongitude();
                     System.out.println(latitude + " " + longitude);
                     List<Address> list = null;
                     try {
-                        list = geocoder.getFromLocation(latitude,longitude,5);
-                        if(list.size()>0){
+                        list = geocoder.getFromLocation(latitude, longitude, 5);
+                        if (list.size() > 0) {
                             android.location.Address address = list.get(0);
                             String adds = address.getSubLocality();
 //                            pos.setText(adds);
@@ -201,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
                 String tmx = Double.toString(x);
                 String tmy = Double.toString(y);
 
-                nexturl = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?tmX="+tmx
-                        +"&tmY="+tmy
+                nexturl = "http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?tmX=" + tmx
+                        + "&tmY=" + tmy
                         + "&ServiceKey=loAKiZyH1dSAChT9zqtXADC%2Fq4PTs6FAApku5zs9J9ozySaGoJqXCaw478Q8S5aXJVGTG4otPiIp4LQJZKF3pQ%3D%3D"
-                        +"&_returnType=json";
+                        + "&_returnType=json";
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -221,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class LocationToStationName extends AsyncTask<String, Void, String>{
+    private class LocationToStationName extends AsyncTask<String, Void, String> {
 
         String nexturl = null;
 
@@ -247,9 +256,9 @@ public class MainActivity extends AppCompatActivity {
                 String stationName = subJsonObject.getString("stationName");
 
                 nexturl = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName="
-                        +stationName + "&dataTerm=daily"
-                        +"&pageNo=1&numOfRows=1"
-                        +"&ServiceKey=loAKiZyH1dSAChT9zqtXADC%2Fq4PTs6FAApku5zs9J9ozySaGoJqXCaw478Q8S5aXJVGTG4otPiIp4LQJZKF3pQ%3D%3D&ver=1.3&_returnType=json";
+                        + stationName + "&dataTerm=daily"
+                        + "&pageNo=1&numOfRows=1"
+                        + "&ServiceKey=loAKiZyH1dSAChT9zqtXADC%2Fq4PTs6FAApku5zs9J9ozySaGoJqXCaw478Q8S5aXJVGTG4otPiIp4LQJZKF3pQ%3D%3D&ver=1.3&_returnType=json";
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -266,10 +275,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class SNameToFineDust extends AsyncTask<String, Void, String>{
+    private class SNameToFineDust extends AsyncTask<String, Void, String> {
 
         ArrayList<FineDust> fineDusts = new ArrayList<>();
-        String tmp=null;
+        String tmp = null;
 
         @Override
         protected String doInBackground(String... strings) {
@@ -290,7 +299,8 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 String list = jsonObject.getString("list");
 
-                fineDusts = gson.fromJson(list, new TypeToken<ArrayList<FineDust>>(){}.getType());
+                fineDusts = gson.fromJson(list, new TypeToken<ArrayList<FineDust>>() {
+                }.getType());
 
                 System.out.println(fineDusts.get(0).getKhaiValue());
             } catch (IOException e) {
@@ -305,58 +315,49 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             finedust.setText(fineDusts.get(0).getPm10Value() + "㎍/㎥");
             System.out.println("수치: " + fineDusts.get(0).getPm10Grade1h());
-            if(fineDusts.get(0).getPm10Grade1h().equals("1")){
+            if (fineDusts.get(0).getPm10Grade1h().equals("1")) {
                 finedustgrade.setText("좋음");
                 finedustgrade.setBackground(getDrawable(R.drawable.grade1));
-            }
-            else if(fineDusts.get(0).getPm10Grade1h().equals("2")){
+            } else if (fineDusts.get(0).getPm10Grade1h().equals("2")) {
                 finedustgrade.setText("보통");
                 finedustgrade.setBackground(getDrawable(R.drawable.grade2));
-            }
-            else if(fineDusts.get(0).getPm10Grade1h().equals("3")){
+            } else if (fineDusts.get(0).getPm10Grade1h().equals("3")) {
                 finedustgrade.setText("나쁨");
                 finedustgrade.setBackground(getDrawable(R.drawable.grade3));
-            }
-            else if(fineDusts.get(0).getPm10Grade1h().equals("4")){
+            } else if (fineDusts.get(0).getPm10Grade1h().equals("4")) {
                 finedustgrade.setText("매우나쁨");
                 finedustgrade.setBackground(getDrawable(R.drawable.grade4));
             }
-            finedust2.setText(fineDusts.get(0).getPm25Value()+"㎍/㎥");
-            if(fineDusts.get(0).getPm25Grade1h().equals("1")){
+            finedust2.setText(fineDusts.get(0).getPm25Value() + "㎍/㎥");
+            if (fineDusts.get(0).getPm25Grade1h().equals("1")) {
                 finedustgrade2.setText("좋음");
                 finedustgrade2.setBackground(getDrawable(R.drawable.grade1));
-            }
-            else if(fineDusts.get(0).getPm25Grade1h().equals("2")){
+            } else if (fineDusts.get(0).getPm25Grade1h().equals("2")) {
                 finedustgrade2.setText("보통");
                 finedustgrade2.setBackground(getDrawable(R.drawable.grade2));
-            }
-            else if(fineDusts.get(0).getPm25Grade1h().equals("3")) {
+            } else if (fineDusts.get(0).getPm25Grade1h().equals("3")) {
                 finedustgrade2.setText("나쁨");
                 finedustgrade2.setBackground(getDrawable(R.drawable.grade3));
-            }
-            else if(fineDusts.get(0).getPm25Grade1h().equals("4")){
+            } else if (fineDusts.get(0).getPm25Grade1h().equals("4")) {
                 finedustgrade2.setText("매우나쁨");
                 finedustgrade2.setBackground(getDrawable(R.drawable.grade4));
             }
 
-            if(fineDusts.get(0).getKhaiGrade().equals("1")){
+            if (fineDusts.get(0).getKhaiGrade().equals("1")) {
                 tmp = "좋음";
-                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp );
+                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp);
                 cmi.setBackgroundResource(R.drawable.grade1);
-            }
-            else if(fineDusts.get(0).getKhaiGrade().equals("2")){
-                tmp="보통";
-                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp );
+            } else if (fineDusts.get(0).getKhaiGrade().equals("2")) {
+                tmp = "보통";
+                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp);
                 cmi.setBackgroundResource(R.drawable.grade2);
-            }
-            else if(fineDusts.get(0).getKhaiGrade().equals("3")){
-                tmp="나쁨";
-                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp );
+            } else if (fineDusts.get(0).getKhaiGrade().equals("3")) {
+                tmp = "나쁨";
+                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp);
                 cmi.setBackgroundResource(R.drawable.grade3);
-            }
-            else{
+            } else {
                 tmp = "매우나쁨";
-                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp );
+                cmi.setText(fineDusts.get(0).getKhaiValue() + " / " + tmp);
                 cmi.setBackgroundResource(R.drawable.grade4);
             }
 
@@ -365,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class GetWeather extends AsyncTask<String, Void, String>{
+    private class GetWeather extends AsyncTask<String, Void, String> {
 
         Sky _sky;
         Temperature _temperature;
@@ -378,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Request request = new Request.Builder()
-                        .addHeader("appKey","331b3c08-cb30-48da-9ac5-b4c80299ee76")
+                        .addHeader("appKey", "331b3c08-cb30-48da-9ac5-b4c80299ee76")
                         .url(url)
                         .build();
 
@@ -393,14 +394,17 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonObject1 = new JSONObject(weather);
                 String minutely = jsonObject1.getString("minutely");
                 JSONArray jsonArray = new JSONArray(minutely);
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject subJsonObject = jsonArray.getJSONObject(i);
                     String sky = subJsonObject.getString("sky");
-                    _sky = gson.fromJson(sky,new TypeToken<Sky>(){}.getType());
+                    _sky = gson.fromJson(sky, new TypeToken<Sky>() {
+                    }.getType());
                     String temperature = subJsonObject.getString("temperature");
-                    _temperature = gson.fromJson(temperature,new TypeToken<Temperature>(){}.getType());
+                    _temperature = gson.fromJson(temperature, new TypeToken<Temperature>() {
+                    }.getType());
                     String station = subJsonObject.getString("station");
-                    _station = gson.fromJson(station,new TypeToken<Station>(){}.getType());
+                    _station = gson.fromJson(station, new TypeToken<Station>() {
+                    }.getType());
                 }
 
             } catch (IOException e) {
@@ -414,55 +418,55 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            if(_sky.getCode().equals("SKY_A01")){
+            if (_sky.getCode().equals("SKY_A01")) {
                 weatherimg.setImageResource(R.drawable.sunny);
-            }
-            else if(_sky.getCode().equals("SKY_A02")){
+            } else if (_sky.getCode().equals("SKY_A02")) {
                 weatherimg.setImageResource(R.drawable.weather02);
-            }
-            else if(_sky.getCode().equals("SKY_A03")){
+            } else if (_sky.getCode().equals("SKY_A03")) {
                 weatherimg.setImageResource(R.drawable.weather03);
-            }
-            else if(_sky.getCode().equals("SKY_A04")){
+            } else if (_sky.getCode().equals("SKY_A04")) {
                 weatherimg.setImageResource(R.drawable.weather04);
-            }
-            else if(_sky.getCode().equals("SKY_A05")){
+            } else if (_sky.getCode().equals("SKY_A05")) {
                 weatherimg.setImageResource(R.drawable.weather05);
-            }
-            else if(_sky.getCode().equals("SKY_A06")){
+            } else if (_sky.getCode().equals("SKY_A06")) {
                 weatherimg.setImageResource(R.drawable.weather06);
-            }
-            else if(_sky.getCode().equals("SKY_A07")){
+            } else if (_sky.getCode().equals("SKY_A07")) {
                 weatherimg.setImageResource(R.drawable.weather07);
-            }
-            else if(_sky.getCode().equals("SKY_A08")){
+            } else if (_sky.getCode().equals("SKY_A08")) {
                 weatherimg.setImageResource(R.drawable.weather04);
-            }
-            else if(_sky.getCode().equals("SKY_A09")){
+            } else if (_sky.getCode().equals("SKY_A09")) {
                 weatherimg.setImageResource(R.drawable.weather05);
-            }
-            else if(_sky.getCode().equals("SKY_A10")){
+            } else if (_sky.getCode().equals("SKY_A10")) {
                 weatherimg.setImageResource(R.drawable.weather06);
-            }
-            else{
+            } else {
                 weatherimg.setImageResource(R.drawable.weather08);
             }
-            int a = (int)Double.parseDouble(_temperature.getTc());
+            int a = (int) Double.parseDouble(_temperature.getTc());
             System.out.println(a);
             String tc = Integer.toString(a);
-            temp.setText(tc+"°C");
-            int max = (int)Double.parseDouble(_temperature.getTmax());
+            temp.setText(tc + "°C");
+            int max = (int) Double.parseDouble(_temperature.getTmax());
             String tmax = Integer.toString(max);
-            int min = (int)Double.parseDouble(_temperature.getTmin());
+            int min = (int) Double.parseDouble(_temperature.getTmin());
             String tmin = Integer.toString(min);
-            max_min_temp.setText("최고온도: " + tmax+"°C" + "\n"
-                    + "최저온도: " + tmin+"°C");
+            max_min_temp.setText("최고온도: " + tmax + "°C" + "\n"
+                    + "최저온도: " + tmin + "°C");
             super.onPostExecute(s);
         }
     }
 
-
-
+//    void init() {
+//        mDrawerLayout = findViewById(R.id.drawer_layout);
+//        mDrawerView = findViewById(R.id.drawer);
+//        finedust = findViewById(R.id.finedust);
+//        finedust2 = findViewById(R.id.finedust2);
+//        finedustgrade = findViewById(R.id.finedustGrade);
+//        finedustgrade2 = findViewById(R.id.finedustGrade2);
+//        cmi = findViewById(R.id.cmi);
+//        temp = findViewById(R.id.temp);
+//        max_min_temp = findViewById(R.id.max_min_temp);
+//        weatherimg = findViewById(R.id.weatherimg);
+//    }
 
     public void customOnClick(View view) {
         switch (view.getId()) {
@@ -485,10 +489,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(mDrawerView);
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
     }
