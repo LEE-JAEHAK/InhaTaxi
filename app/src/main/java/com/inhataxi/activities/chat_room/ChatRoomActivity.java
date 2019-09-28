@@ -1,5 +1,6 @@
 package com.inhataxi.activities.chat_room;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +12,10 @@ import com.inhataxi.R;
 import com.inhataxi.RetrofitInterface;
 import com.inhataxi.model.ChatRoomItem;
 import com.inhataxi.response.ChattingRoomResponse;
+import com.inhataxi.response.SuperResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -26,11 +31,13 @@ public class ChatRoomActivity extends AppCompatActivity {
     ArrayList<ChatRoomItem> mArrayChat;
     RecyclerView mRvChatRoom;
     ChatRoomAdapter mChatRoomAdapter;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        mContext=this;
         this.initialize();
 
         try {
@@ -63,35 +70,40 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-/*
-    void postChattingRoom(RequestBody params) {
-        final RetrofitInterface chatRetrofitInterface = getRetrofitMethod(this);
-        chatRetrofitInterface.postChatRoom(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<ChattingRoomResponse>() {
+    void postAsk(String ask) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("type", 5);
+        params.put("askType", "");
+        params.put("content", ask);
+
+        final RetrofitInterface retrofitInterface = getRetrofit(mContext).create(RetrofitInterface.class);
+        retrofitInterface.postAsk(RequestBody.create( params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<SuperResponse>() {
             @Override
-            public void onResponse(Call<ChattingRoomResponse> call, Response<ChattingRoomResponse> response) {
-
-                final ChattingRoomResponse chattingRoomResponse = response.body();
-                if (chattingRoomResponse == null) {
-
-                    return;
+            public void onResponse(@NonNull final Call<SuperResponse> call,
+                                   @NonNull final Response<SuperResponse> response) {
+//                hideProgressDialog();
+                SuperResponse superResponse = response.body();
+                if (superResponse == null) {
+//                    showCustomToast(mContext, getString(R.string.network_error));
                 }
-                //가져오기 성공
-                if (chattingRoomResponse.isSuccess()) {
-
-
-
-                //가져오기 실패
-                } else {
+                switch (superResponse.getCode()) {
+                    case 100:
+//                        showCustomToast(mContext, getString(R.string.ask_write_done));
+                        finish();
+                        break;
+                    case 201:
+                        break;
+                    default:
+                        break;
                 }
             }
-
             @Override
-            public void onFailure(Call<ChattingRoomResponse> call, Throwable t) {
-
+            public void onFailure(@NonNull final Call<SuperResponse> call,
+                                  @NonNull final Throwable throwable) {
+//                hideProgressDialog();
+//                showCustomToast(mContext, getString(R.string.network_error));
             }
         });
-
     }
-*/
 
 }
