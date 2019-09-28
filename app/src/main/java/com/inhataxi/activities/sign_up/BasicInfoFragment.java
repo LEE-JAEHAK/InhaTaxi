@@ -61,21 +61,16 @@ public class BasicInfoFragment extends BaseFragment {
     }
 
     private void checkValidation(){
-        if (!checkEmail(mEditTextEmail.getText().toString())) {
+        if(mEditTextEmail.getText().toString().equals(""))
+        {
             mTextViewError.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else {
             mTextViewError.setVisibility(View.INVISIBLE);
             mViewPagerSignUp.setCurrentItem(1);
         }
     }
 
-    private boolean checkEmail(String email) {
-        String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(email);
-        boolean isNormal = m.matches();
-        return isNormal;
-    }
 
 
     @Override
@@ -85,6 +80,6 @@ public class BasicInfoFragment extends BaseFragment {
         mTextViewError = v.findViewById(R.id.basic_info_tv_error);
         mTextViewTitle = v.findViewById(R.id.basic_info_tv_title);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-        mTextViewTitle.setText(Html.fromHtml("<b>이메일</b>을<br>입력해주세요."));
+        mTextViewTitle.setText(Html.fromHtml("<b>아이디</b>을<br>입력해주세요."));
     }
 }

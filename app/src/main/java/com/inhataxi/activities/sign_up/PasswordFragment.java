@@ -67,7 +67,7 @@ public class PasswordFragment extends BaseFragment {
                 mTextViewError.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(getContext(), SchoolCertificationActivity.class));
             } else {
-                mTextViewError.setText("영문, 숫자르 포함한 6~10자리의 비밀번호만 가능합니다");
+                mTextViewError.setText("영문, 숫자를 포함한 6~10자리의 비밀번호만 가능합니다");
                 mTextViewError.setVisibility(View.VISIBLE);
             }
         } else {

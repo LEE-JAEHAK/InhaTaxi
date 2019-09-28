@@ -123,6 +123,8 @@ public class SchoolCertificationActivity extends BaseActivity {
 
     private boolean genderCheck = false;
 
+    private TextView error;
+
     LoadingDialog loadingDialog ;
 
 
@@ -156,6 +158,7 @@ public class SchoolCertificationActivity extends BaseActivity {
     void init() {
         mTabLayout = findViewById(R.id.activity_school_certification_tab);
         mImageViewThumbnail = findViewById(R.id.activity_school_certification_iv_thumbnail);
+        mImageViewThumbnail.setClipToOutline(true);
         mImageViewButton = findViewById(R.id.activity_school_certification_iv_upload);
         mTextViewName = findViewById(R.id.school_certification_et_name);
         mTextViewCode = findViewById(R.id.school_certification_et_code);
@@ -163,6 +166,7 @@ public class SchoolCertificationActivity extends BaseActivity {
         mButtonMan = findViewById(R.id.school_certification_btn_genderMan);
         mButtonWoman = findViewById(R.id.school_certification_btn_genderWoman);
         mImageViewDone = findViewById(R.id.basic_info_done);
+        error = findViewById(R.id.tv_error);
     }
 
     private boolean checkPermissions() {
@@ -447,6 +451,7 @@ public class SchoolCertificationActivity extends BaseActivity {
                     System.out.println("d= " + code);
                     mTextViewCode.setText(code);
                 }
+                error.setVisibility(View.VISIBLE);
             }
             loadingDialog.dismiss();
 

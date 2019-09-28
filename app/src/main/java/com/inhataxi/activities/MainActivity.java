@@ -114,6 +114,23 @@ public class MainActivity extends AppCompatActivity {
         mAutoViewPagerEventBanner.setPageMargin(margin / 2);
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_go_school:
+                //등교 액티비티로 이동
+                Intent intentSchool = new Intent(this, MapSearchActivity.class);
+                intentSchool.putExtra("select", 1);
+                startActivity(intentSchool);
+                break;
+            case R.id.rl_go_home:
+                //하교 액티비티로 이동
+                Intent intentHome = new Intent(this, MapSearchActivity.class);
+                intentHome.putExtra("select", 2);
+                startActivity(intentHome);
+                break;
+        }
+    }
+
     void init(){
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerView = findViewById(R.id.drawer);
