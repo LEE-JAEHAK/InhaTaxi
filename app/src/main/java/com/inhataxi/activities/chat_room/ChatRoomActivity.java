@@ -96,7 +96,7 @@ public class ChatRoomActivity extends BaseActivity {
         params.put("type", 1);
 
         //로딩 다이얼로그
-        //mDialog.show();
+        mDialog.show();
 
         final RetrofitInterface retrofitInterface = getRetrofit(mContext).create(RetrofitInterface.class);
         retrofitInterface.postChatRoom(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<ChattingRoomResponse>() {
@@ -125,7 +125,7 @@ public class ChatRoomActivity extends BaseActivity {
                     showCustomToast("목록을 불러오지 못했습니다.");
                 }
                 //로딩 끝
-                //mDialog.dismiss();
+                mDialog.dismiss();
             }
 
             @Override
