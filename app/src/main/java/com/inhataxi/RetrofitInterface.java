@@ -1,11 +1,13 @@
 package com.inhataxi;
 
+import com.inhataxi.response.ChattingRoomResponse;
 import com.inhataxi.response.SuperResponse;
 import com.inhataxi.response.TestDetailResponse;
 import com.inhataxi.response.TestListResponse;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
+import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -31,6 +33,9 @@ public interface RetrofitInterface {
 
     @POST("text")
     Observable<SuperResponse> postText(@Body RequestBody params);
+
+    @POST("/inha/getRoom")
+    Callback<ChattingRoomResponse> postChatRoom(@Body RequestBody params);
 
 //    Mixed Example
 //    @POST("test/{v1}/{v2}")

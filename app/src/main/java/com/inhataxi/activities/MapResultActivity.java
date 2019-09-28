@@ -203,19 +203,25 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 //                        "endLongitude" : 37.4500263,
 //                        "endLatitude" : 126.6512993,
 //                        "type" : 1
-                editor.putString("endLatitude", String.valueOf(inhaLat));
-                editor.putString("endLongitude", String.valueOf(inhaLon));
-                editor.putString("startLatitude", String.valueOf(x));
-                editor.putString("startLongitude", String.valueOf(y));
-                editor.putInt("type", state);
+                Intent intent = new Intent(this, MapResultActivity.class);
+                intent.putExtra("endLatitude", String.valueOf(inhaLat));
+                intent.putExtra("endLongitude", String.valueOf(inhaLon));
+                intent.putExtra("startLatitude", String.valueOf(x));
+                intent.putExtra("startLongitude", String.valueOf(y));
+                intent.putExtra("type", state);
+//                startActivity("민재 여기 ㄱㄱ");
+                finish();
                 //목적지 고정
             }
             else if(state ==2){
-                editor.putString("startLatitude", String.valueOf(inhaLat));
-                editor.putString("startLongitude", String.valueOf(inhaLon));
-                editor.putString("endLatitude", String.valueOf(x));
-                editor.putString("endLongitude", String.valueOf(y));
-                editor.putInt("type", state);
+                Intent intent = new Intent(this, MapResultActivity.class);
+                intent.putExtra("startLatitude", String.valueOf(inhaLat));
+                intent.putExtra("startLongitude", String.valueOf(inhaLon));
+                intent.putExtra("endLatitude", String.valueOf(x));
+                intent.putExtra("endLongitude", String.valueOf(y));
+                intent.putExtra("type", state);
+//                startActivity(intent);
+                finish();
                 // 출발지 고정
             }
             editor.putInt("type", state);

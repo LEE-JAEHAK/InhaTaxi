@@ -93,7 +93,7 @@
             android:layout_height="103dp"
             android:onClick="onClick"
             android:src="@drawable/recamera" />
-
+            android:onClick="onClick" />
         <ImageView
             android:id="@+id/iv_next"
             android:layout_width="wrap_content"
