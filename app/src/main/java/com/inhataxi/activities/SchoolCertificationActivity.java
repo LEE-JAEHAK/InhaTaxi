@@ -8,6 +8,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,12 +27,19 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -48,6 +56,10 @@ import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 import com.google.api.services.vision.v1.model.ImageContext;
 import com.google.api.services.vision.v1.model.TextAnnotation;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.inhataxi.LoadingDialog;
 import com.inhataxi.PackageManagerUtils;
 import com.inhataxi.PermissionUtils;
@@ -94,8 +106,8 @@ public class SchoolCertificationActivity extends BaseActivity {
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}; //권한 설정 변수
     private static final int MULTIPLE_PERMISSIONS = 101; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
     private Uri photoUri;
-    private ImageView mImageViewThumbnail, mImageViewButton;
-    private TextView mTextViewTitle, mTextViewContent;
+    private ImageView mImageViewThumbnail, mImageViewButton, mImageViewDone;
+    private EditText mTextViewName, mTextViewCode, mTextViewDept;
     private int mMode = BEFORE_IMAGE;
 
     private static final int GALLERY_IMAGE_REQUEST = 1;
@@ -107,22 +119,50 @@ public class SchoolCertificationActivity extends BaseActivity {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
 
+    private Button mButtonMan, mButtonWoman;
+
+    private boolean genderCheck = false;
+
+    LoadingDialog loadingDialog ;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_certification);
-        mContext=this;
+        mContext = this;
         init();
+        loadingDialog = new LoadingDialog(mContext);
         initTab();
         checkPermissions();
+        mImageViewDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!mTextViewName.getText().toString().equals("") && !mTextViewCode.getText().toString().equals("") && !mTextViewDept.getText().toString().equals("") && genderCheck) {
+                    try {
+                        uploadFileToFireBase(photoUri);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent(SchoolCertificationActivity.this, WelcomeActivity.class);
+                    intent.putExtra("name", mTextViewName.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     void init() {
         mTabLayout = findViewById(R.id.activity_school_certification_tab);
         mImageViewThumbnail = findViewById(R.id.activity_school_certification_iv_thumbnail);
         mImageViewButton = findViewById(R.id.activity_school_certification_iv_upload);
-        mTextViewTitle = findViewById(R.id.activity_school_certification_tv_title);
-        mTextViewContent = findViewById(R.id.activity_school_certification_tv_content);
+        mTextViewName = findViewById(R.id.school_certification_et_name);
+        mTextViewCode = findViewById(R.id.school_certification_et_code);
+        mTextViewDept = findViewById(R.id.school_certification_et_dept);
+        mButtonMan = findViewById(R.id.school_certification_btn_genderMan);
+        mButtonWoman = findViewById(R.id.school_certification_btn_genderWoman);
+        mImageViewDone = findViewById(R.id.basic_info_done);
     }
 
     private boolean checkPermissions() {
@@ -170,39 +210,39 @@ public class SchoolCertificationActivity extends BaseActivity {
     }
 
     private void takePhoto() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //사진을 찍기 위하여 설정합니다.
-//        File photoFile = null;
-//        try {
-//            photoFile = createImageFile();
-//        } catch (IOException e) {
-//            showCustomToast(mContext.getString(R.string.school_certification_image_error));
-//            finish();
-//        }
-//        if (photoFile != null) {
-//            photoUri = FileProvider.getUriForFile(SchoolCertificationActivity.this,
-//                    "com.inhataxi.provider", photoFile); //FileProvider의 경우 이전 포스트를 참고하세요.
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //사진을 찍어 해당 Content uri를 photoUri에 적용시키기 위함
-//            startActivityForResult(intent, PICK_FROM_CAMERA);
-//        }
-        if (PermissionUtils.requestPermission(
-                this,
-                CAMERA_PERMISSIONS_REQUEST,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //사진을 찍기 위하여 설정합니다.
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException e) {
+            showCustomToast(mContext.getString(R.string.school_certification_image_error));
+            finish();
         }
+        if (photoFile != null) {
+            photoUri = FileProvider.getUriForFile(SchoolCertificationActivity.this,
+                    "com.inhataxi.provider", photoFile); //FileProvider의 경우 이전 포스트를 참고하세요.
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //사진을 찍어 해당 Content uri를 photoUri에 적용시키기 위함
+            startActivityForResult(intent, PICK_FROM_CAMERA);
+        }
+
+//        if (PermissionUtils.requestPermission(
+//                this,
+//                CAMERA_PERMISSIONS_REQUEST,
+//                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                Manifest.permission.CAMERA)) {
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
+//        }
     }
 
     public File getCameraFile() {
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return new File(dir, FILE_NAME);
     }
-
-
 
 
     private File createImageFile() throws IOException {
@@ -224,47 +264,57 @@ public class SchoolCertificationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode != RESULT_OK) {
-//            Toast.makeText(SchoolCertificationActivity.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-//        }
-//        if (requestCode == PICK_FROM_ALBUM) {
-//            if (data == null) {
-//                return;
-//            }
-//            photoUri = data.getData();
-//            cropImage();
-//        } else if (requestCode == PICK_FROM_CAMERA) {
-//            cropImage();
-//            MediaScannerConnection.scanFile(SchoolCertificationActivity.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
-//                    new String[]{photoUri.getPath()}, null,
-//                    new MediaScannerConnection.OnScanCompletedListener() {
-//                        public void onScanCompleted(String path, Uri uri) {
-//                        }
-//                    });
-//        } else if (requestCode == CROP_FROM_CAMERA) {
-//            try { //저는 bitmap 형태의 이미지로 가져오기 위해 아래와 같이 작업하였으며 Thumbnail을 추출하였습니다.
-//
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-//                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 128, 128);
-//                ByteArrayOutputStream bs = new ByteArrayOutputStream();
-//                thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
-//
-//
-//                mImageViewThumbnail.setImageBitmap(thumbImage);
-//                Glide.with(mContext).load(R.drawable.btn_school_certification).into(mImageViewButton);
-//                mMode = AFTER_IMAGE;
-//            } catch (Exception e) {
-//            }
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(SchoolCertificationActivity.this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        if (requestCode == PICK_FROM_ALBUM) {
+            if (data == null) {
+                return;
+            }
+            photoUri = data.getData();
+            cropImage();
+        } else if (requestCode == PICK_FROM_CAMERA) {
+            cropImage();
+            MediaScannerConnection.scanFile(SchoolCertificationActivity.this, //앨범에 사진을 보여주기 위해 Scan을 합니다.
+                    new String[]{photoUri.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
+        } else if (requestCode == CROP_FROM_CAMERA) {
+            try { //저는 bitmap 형태의 이미지로 가져오기 위해 아래와 같이 작업하였으며 Thumbnail을 추출하였습니다.
+
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(bitmap, 800, 500);
+                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
+
+
+                mImageViewThumbnail.setImageBitmap(thumbImage);
+                Glide.with(mContext).load(R.drawable.btn_school_certification).into(mImageViewButton);
+                mMode = AFTER_IMAGE;
+            } catch (Exception e) {
+            }
 //        }
 
-        if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uploadImage(data.getData());
-        } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
+//
+//            if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+//            } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
+//                Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+//                uploadImage(photoUri);
+//            }
+
+//            if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+//            uploadImage(data.getData());
+//            } else if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
             Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            uploadImage(photoUri);
+//            uploadImage(photoUri);
+            uploadImage(data.getData());
+
+
+//            }
         }
     }
-
 
 
     public void uploadImage(Uri uri) {
@@ -288,14 +338,13 @@ public class SchoolCertificationActivity extends BaseActivity {
             Log.d(TAG, "Image picker gave us a null image.");
             Toast.makeText(this, "다시 시도해주세요", Toast.LENGTH_LONG).show();
         }
-        final LoadingDialog dialog = new LoadingDialog(mContext);
-        dialog.show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        },1500); //1초 있다가 메인으로 넘어가게.
+        loadingDialog.show();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                dialog.dismiss();
+//            }
+//        }, 1500); //1초 있다가 메인으로 넘어가게.
     }
 
 
@@ -330,14 +379,12 @@ public class SchoolCertificationActivity extends BaseActivity {
 //            message.append("nothing");
 //        }
 
-        if(text!=null){
+        if (text != null) {
             message.append(text.getText());
         }
 
         return message.toString();
     }
-
-
 
 
     private class LableDetectionTask extends AsyncTask<Object, Void, String> {
@@ -370,18 +417,58 @@ public class SchoolCertificationActivity extends BaseActivity {
             if (activity != null && !activity.isFinishing()) {
                 System.out.println(result);
                 int a = result.indexOf("-");
-                String gender = result.substring(a+1, a+2);
-                System.out.println("a= " + gender);
+                if (a != -1) {
+                    String gender = result.substring(a + 1, a + 2);
+                    System.out.println("a= " + gender);
+                    if (gender.equals("1")) {
+                        mButtonMan.setPressed(true);
+                        mButtonMan.setSelected(true);
+                        genderCheck = true;
+                    } else if (gender.equals("2")) {
+                        mButtonWoman.setPressed(true);
+                        mButtonWoman.setSelected(true);
+                    }
+                }
                 int b = result.indexOf("성명");
-                String name = result.substring(b+3, b+6);
-                System.out.println("b= " + name);
+                if (b != -1) {
+                    String name = result.substring(b + 3, b + 6);
+                    System.out.println("b= " + name);
+                    mTextViewName.setText(name);
+                }
                 int c = result.indexOf("학과");
-                String dept = result.substring(c+3, c+9);
-                System.out.println("c= " + dept);
+                if (c != -1) {
+                    String dept = result.substring(c + 3, c + 9);
+                    System.out.println("c= " + dept);
+                    mTextViewDept.setText(dept);
+                }
                 int d = result.indexOf("121");
-                String code = result.substring(d, d+8);
-                System.out.println("d= "+ code);
+                if (d != -1) {
+                    String code = result.substring(d, d + 8);
+                    System.out.println("d= " + code);
+                    mTextViewCode.setText(code);
+                }
             }
+            loadingDialog.dismiss();
+
+        }
+    }
+
+    public void genderClick(View view) {
+        switch (view.getId()) {
+            case R.id.school_certification_btn_genderWoman:
+                mButtonWoman.setPressed(true);
+                mButtonWoman.setSelected(true);
+                mButtonMan.setPressed(false);
+                mButtonMan.setSelected(false);
+                genderCheck = true;
+                break;
+            case R.id.school_certification_btn_genderMan:
+                mButtonMan.setPressed(true);
+                mButtonMan.setSelected(true);
+                mButtonWoman.setPressed(false);
+                mButtonWoman.setSelected(false);
+                genderCheck = true;
+                break;
         }
     }
 
@@ -508,8 +595,8 @@ public class SchoolCertificationActivity extends BaseActivity {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.putExtra("crop", "true");
-            intent.putExtra("aspectX", 4);
-            intent.putExtra("aspectY", 3);
+            intent.putExtra("aspectX", 16);
+            intent.putExtra("aspectY", 10);
             intent.putExtra("scale", true);
             File croppedFileName = null;
             try {
@@ -522,7 +609,7 @@ public class SchoolCertificationActivity extends BaseActivity {
             File tempFile = new File(folder.toString(), croppedFileName.getName());
 
             photoUri = FileProvider.getUriForFile(SchoolCertificationActivity.this,
-                    "com.inha.provider", tempFile);
+                    "com.inhataxi.provider", tempFile);
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -551,9 +638,9 @@ public class SchoolCertificationActivity extends BaseActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText("학교인증"));
 
         //탭 터치안되게 막기//
-        LinearLayout tabStrip = ((LinearLayout)mTabLayout.getChildAt(0));
+        LinearLayout tabStrip = ((LinearLayout) mTabLayout.getChildAt(0));
         tabStrip.setEnabled(false);
-        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setClickable(false);
         }
         /////////////////
@@ -561,7 +648,7 @@ public class SchoolCertificationActivity extends BaseActivity {
         tab.select();
     }
 
-    void imageUploadChoiceDialog(){
+    void imageUploadChoiceDialog() {
         DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -588,66 +675,101 @@ public class SchoolCertificationActivity extends BaseActivity {
                 .show();
     }
 
-    private void uploadFileToFireBase() {
-//        final SchoolCertificationService schoolCertificationService = new SchoolCertificationService(this);
-//        schoolCertificationService.uploadFileToFireBase(photoUri);
-    }
-
-
-    public void customOnClick(View view) {
+    public void customOnClick(View view) throws JSONException {
         switch (view.getId()) {
             case R.id.activity_school_certification_iv_back:
                 finish();
                 break;
             case R.id.activity_school_certification_iv_upload:
-                if(mMode == BEFORE_IMAGE){
+                if (mMode == BEFORE_IMAGE) {
                     imageUploadChoiceDialog();
-                }
-                else if(mMode == AFTER_IMAGE){
-                    uploadFileToFireBase();
-                }
-                else if(mMode == AFTER_SEVER_UPLOAD){
+                } else if (mMode == AFTER_SEVER_UPLOAD) {
                     startActivity(new Intent(getApplication(), LoginActivity.class));
                 }
                 break;
+
+            case R.id.basic_info_done:
             default:
                 break;
         }
     }
 
 
-    void postAsk(String ask) throws JSONException {
-        JSONObject params = new JSONObject();
-        params.put("type", 5);
-        params.put("askType", "");
-        params.put("content", ask);
+    void uploadFileToFireBase(Uri mImageUri) throws JSONException {
+        final LoadingDialog loadingDialog = new LoadingDialog(mContext);
+        loadingDialog.show();
+//        progressDialog.setTitle("업로드중...");
+//        progressDialog.show();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        Date now = new Date();
+        final StorageReference storageRef = storage.getReferenceFromUrl("gs://inha-taxi.appspot.com/").child("user/" + mImageUri.getLastPathSegment());
+        UploadTask uploadTask = storageRef.putFile(mImageUri);
+        storageRef.putFile(mImageUri)
+                //성공시
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
+                    }
+                })
+                //실패시
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingDialog.dismiss();
+                        showCustomToast("업로드 실패");
+                    }
+                })
+                //진행중
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                        @SuppressWarnings("VisibleForTests")
+//                        double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                        progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
+                    }
+                });
 
-        final RetrofitInterface retrofitInterface = getRetrofit(mContext).create(RetrofitInterface.class);
-        retrofitInterface.postAsk(RequestBody.create( params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<SuperResponse>() {
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onResponse(@NonNull final Call<SuperResponse> call,
-                                   @NonNull final Response<SuperResponse> response) {
-//                hideProgressDialog();
-                SuperResponse superResponse = response.body();
-                if (superResponse == null) {
-//                    showCustomToast(mContext, getString(R.string.network_error));
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
                 }
-                switch (superResponse.getCode()) {
-                    case 100:
-//                        showCustomToast(mContext, getString(R.string.ask_write_done));
-                        finish();
-                        break;
-                    case 201:
-                        break;
-                    default:
-                        break;
-                }
+                return storageRef.getDownloadUrl();
             }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onFailure(@NonNull final Call<SuperResponse> call,
-                                  @NonNull final Throwable throwable) {
-//                hideProgressDialog();
-//                showCustomToast(mContext, getString(R.string.network_error));
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+//                    mProfileImageUrl = downloadUri.toString();
+
+
+                    Glide.with(mContext)
+                            .load(downloadUri.toString())
+                            .fitCenter()
+//                            .placeholder(R.drawable.placeholder)
+//                            .error(R.drawable.imagenotfound)
+                            .into(mImageViewThumbnail);
+//                    mImageViewThumbnail
+
+
+                    loadingDialog.dismiss();
+//                    mTextViewTitle.setText("이미지 첨부가\n완료되었습니다.");
+//                    mTextViewContent.setText("빠른 시일 내에 처리하겠습니다.");
+
+//                    Glide.with(mContext).load(R.drawable.btn_yellow_ok).into(mImageViewButton);
+
+                    mMode = AFTER_SEVER_UPLOAD;//                    try {
+////                        postPofileImage();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    showCustomToast(mContext, "업로드!");
+                } else {
+                    //실패시
+                }
             }
         });
     }

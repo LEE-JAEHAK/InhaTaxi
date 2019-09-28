@@ -82,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
         setContentView(R.layout.activity_main);
         init();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         getMyLocation();
+//        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        getMyLocation();
     }
 
     private void getMyLocation() {

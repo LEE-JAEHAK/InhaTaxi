@@ -19,9 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+        <activity
+            android:name=".activities.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SwipeAnimationTheme" />
         <activity
             android:name=".activities.SchoolCertificationActivity"
             android:screenOrientation="portrait"
@@ -30,13 +33,13 @@
 
 
         <activity android:name=".activities.MapSearchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
-        <activity android:name=".activities.GoogleCloudeVisionActivity"></activity>
+        <activity android:name=".activities.GoogleCloudeVisionActivity" />
         <activity android:name=".activities.chat_room.ChatRoomActivity" />
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.MainActivity"></activity>
@@ -48,12 +51,19 @@
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.MapResultActivity"></activity>
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.MapResultActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="a421f2824f3f07b1f5dd5e6bb129f274" />
@@ -63,6 +73,7 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.inhataxi.provider"
@@ -78,7 +89,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
