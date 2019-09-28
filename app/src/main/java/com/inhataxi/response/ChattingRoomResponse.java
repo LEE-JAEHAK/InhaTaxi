@@ -1,17 +1,23 @@
 package com.inhataxi.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.inhataxi.model.ChatRoom;
 
-public class SuperResponse {
+import java.util.ArrayList;
+
+public class ChattingRoomResponse {
 
     @SerializedName("isSuccess")
-    public boolean isSuccess;
+    private boolean isSuccess;
 
     @SerializedName("code")
     private int code;
 
     @SerializedName("message")
     private String message;
+
+    @SerializedName("result")
+    public ArrayList<ChatRoom> result;
 
     public int getCode() {
         return code;
@@ -24,4 +30,5 @@ public class SuperResponse {
     public boolean isSuccess() {
         return isSuccess;
     }
+
 }

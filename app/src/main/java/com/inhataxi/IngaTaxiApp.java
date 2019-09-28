@@ -28,7 +28,7 @@ public class IngaTaxiApp extends Application {
     public static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=uft-8");
     public static MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
 
-    public static String BASE_URL = "http://15.164.118.95/";
+    public static String BASE_URL = "http://15.206.36.229/";
     // 싱글톤 데이터 리스트
     @Override
     public void onCreate() {

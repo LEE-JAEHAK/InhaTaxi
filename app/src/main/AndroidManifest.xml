@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.GoogleCloudeVisionActivity"></activity>
+        <activity android:name=".activities.chat_room.ChatRoomActivity" />
+        <activity android:name=".activities.SelectActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

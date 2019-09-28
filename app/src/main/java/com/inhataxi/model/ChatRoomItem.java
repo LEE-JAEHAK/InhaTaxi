@@ -1,31 +1,21 @@
 package com.inhataxi.model;
 
-import com.google.gson.annotations.SerializedName;
+public class ChatRoomItem {
 
-public class ChatRoom {
-
-    @SerializedName("name")
     private String name;
 
-    @SerializedName("dept")
     private String dept;
 
-    @SerializedName("user_count")
     private int count;
 
-    @SerializedName("created_at")
     private String time;
 
-    @SerializedName("distance")
     private double distance;
 
-    @SerializedName("start_string")
     private String departure;
 
-    @SerializedName("end_string")
     private String destination;
 
-    @SerializedName("profile_url")
     private String imageUrl;
 
     public String getName() {

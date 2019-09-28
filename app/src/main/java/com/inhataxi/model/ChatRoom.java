@@ -2,25 +2,61 @@ package com.inhataxi.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TestData {
-    @SerializedName("no")
-    private int no;
+public class ChatRoom {
 
     @SerializedName("name")
     private String name;
 
-    @SerializedName("registeredTimestamp")
-    private String registeredTimestamp;
+    @SerializedName("dept")
+    private String dept;
 
-    public String getRegisteredTimestamp() {
-        return registeredTimestamp;
-    }
+    @SerializedName("user_count")
+    private int count;
 
-    public int getNo() {
-        return no;
-    }
+    @SerializedName("created_at")
+    private String time;
+
+    @SerializedName("distance")
+    private double distance;
+
+    @SerializedName("start_string")
+    private String departure;
+
+    @SerializedName("end_string")
+    private String destination;
+
+    @SerializedName("profile_url")
+    private String imageUrl;
 
     public String getName() {
         return name;
+    }
+
+    public String getDept() {
+        return dept;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public String getDeparture() {
+        return departure;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

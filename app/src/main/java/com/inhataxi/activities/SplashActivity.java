@@ -18,6 +18,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },1500); //1초 있다가 메인으로 넘어가게.
+        },1500); //1.5초 있다가 메인으로 넘어가게.
     }
 }
