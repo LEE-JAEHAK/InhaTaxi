@@ -36,7 +36,7 @@ public interface RetrofitInterface {
     Observable<SuperResponse> postText(@Body RequestBody params);
 
     @POST("/inha/getRoom")
-    Callback<ChattingRoomResponse> postChatRoom(@Body RequestBody params);
+    Call<ChattingRoomResponse> postChatRoom(@Body RequestBody params);
 
 //    Mixed Example
 //    @POST("test/{v1}/{v2}")

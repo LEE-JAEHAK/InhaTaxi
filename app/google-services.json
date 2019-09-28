@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "581218245361-l03saanj6epg9b9hebq9cp7nmvqhi93v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inhataxi",
+            "certificate_hash": "4f490b43cad47c8caa3eb0ebf8b9542008ab47e0"
+          }
+        },
+        {
           "client_id": "581218245361-1gtu47n6bqi2d9vvf24aipma3n4l119c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

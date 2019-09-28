@@ -19,8 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup"
+        >
+        <activity android:name=".activities.WebActivity"/>
         <activity
             android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -31,14 +34,7 @@
             android:theme="@style/SwipeAnimationTheme"
             android:usesCleartextTraffic="true" />
 
-
-        <activity android:name=".activities.MapSearchActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name=".activities.MapSearchActivity"></activity>
         <activity android:name=".activities.GoogleCloudeVisionActivity" />
         <activity android:name=".activities.chat_room.ChatRoomActivity">
             <intent-filter>
@@ -48,11 +44,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SelectActivity" />
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.sign_up.SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SwipeAnimationTheme"></activity>
+            android:theme="@style/SwipeAnimationTheme" />
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
@@ -96,4 +96,5 @@
         </service>
 
     </application>
+
 </manifest>
