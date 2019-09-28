@@ -92,7 +92,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         holder.tvChatRoomMaker.setText(chatRoomItem.getName());
         holder.tvChatRoomNum.setText(String.valueOf(chatRoomItem.getCount()));
         int distance = (int) (chatRoomItem.getDistance() * 1000);
-        holder.tvChatRoomDistance.setText(String.valueOf(distance) + " m");
+        holder.tvChatRoomDistance.setText(String.valueOf(distance).concat(" m"));
         holder.tvChatRoomDeparture.setText(chatRoomItem.getDeparture());
         holder.tvChatRoomDestination.setText(chatRoomItem.getDestination());
         String time = chatRoomItem.getTime().substring(14);

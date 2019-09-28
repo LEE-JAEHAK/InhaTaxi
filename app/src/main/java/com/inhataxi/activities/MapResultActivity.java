@@ -38,31 +38,38 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     private ImageView marker;
     private ViewGroup mapViewContainer;
     private TextView logoTv;
-    private int state =0;
+    private int state = 0;
     private double inhaLat = 37.451143;
-    private  double inhaLon = 126.656367;
+    private double inhaLon = 126.656367;
 
     public String getName() {
         return name;
     }
+
     public String getAddress() {
         return address;
     }
+
     public double getX() {
         return x;
     }
+
     public double getY() {
         return y;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public void setX(double x) {
         this.x = x;
     }
+
     public void setY(double y) {
         this.y = y;
     }
@@ -79,8 +86,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         //Bring to values from MapSearchActivity
 
         mapViewContainer = (ViewGroup) findViewById(R.id.map_show);
-        detailEt = findViewById(R.id.map_result_detail_addr_et);
-        finishBt = findViewById(R.id.map_result_finish_tv);
+        finishBt = findViewById(R.id.map_result_find_tv);
         addrTv = findViewById(R.id.map_result_default_addr_tv);
         backTv = findViewById(R.id.map_result_back_tv);
         marker = findViewById(R.id.marker_result);
@@ -108,10 +114,9 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 
         intent = getIntent();
         state = intent.getIntExtra("select", 1);
-        if(state ==1){
+        if (state == 1) {
             logoTv.setText("출발지를 선택해주세요");
-        }
-        else if(state ==2){
+        } else if (state == 2) {
             logoTv.setText("목적지를 선택해주세요");
         }
     }
@@ -162,16 +167,16 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         Geocoder geo = new Geocoder(this, Locale.getDefault());
         List<Address> names = null;
         try {
-            names = geo.getFromLocation( mapView.getMapCenterPoint().getMapPointGeoCoord().latitude,  mapView.getMapCenterPoint().getMapPointGeoCoord().longitude, 10);
+            names = geo.getFromLocation(mapView.getMapCenterPoint().getMapPointGeoCoord().latitude, mapView.getMapCenterPoint().getMapPointGeoCoord().longitude, 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (names.size() > 0) {
             String tmp = names.get(0).getAddressLine(0);
-            if(tmp.contains("대한민국 ")){
+            if (tmp.contains("대한민국 ")) {
                 tmp = tmp.replace("대한민국 ", "");
             }
-            if(tmp.contains("서울특별시")){
+            if (tmp.contains("서울특별시")) {
                 tmp = tmp.replace("서울특별시 ", "");
             }
             //Process long address line
@@ -191,9 +196,9 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     public void onClick(View v) {
         if (v.getId() == R.id.map_result_back_tv) {
             finish();
-        } else if (v.getId() == R.id.map_result_finish_tv) {
+        } else if (v.getId() == R.id.map_result_find_tv) {
 
-            if(state ==1) {
+            if (state == 1) {
 //                "startLongitude" : 37.4650456,
 //                        "startLatitude" : 126.6785137,
 //                        "endLongitude" : 37.4500263,
@@ -208,8 +213,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                 startActivity(intent);
                 finish();
                 //목적지 고정
-            }
-            else if(state ==2){
+            } else if (state == 2) {
                 Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra("startLatitude", String.valueOf(inhaLat));
                 intent.putExtra("startLongitude", String.valueOf(inhaLon));
@@ -222,9 +226,10 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
             }
 
             //finish();
+        } else if (v.getId() == R.id.map_result_make_tv) {
+
         }
         //store map information
     }
-
 
 }
