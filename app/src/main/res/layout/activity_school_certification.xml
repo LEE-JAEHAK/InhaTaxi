@@ -23,11 +23,16 @@
             android:padding="5dp"
             android:onClick="customOnClick"
             app:srcCompat="@drawable/ic_back_white" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:lineSpacingExtra="8sp"
+            android:text="회원가입"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold" />/>
 
     </LinearLayout>
 
@@ -66,7 +71,7 @@
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
-                android:text="이미지 첨부로\n학교 인증하기"
+                android:text="학생증으로\n학교 인증하기"
                 />
 
             <TextView
@@ -91,12 +96,27 @@
 
             <ImageView
                 android:id="@+id/activity_school_certification_iv_thumbnail"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
+                android:layout_marginEnd="100dp"
+                android:scaleType="fitXY"
                 android:layout_height="200dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_round_white_gray" />
+
+            <TextView
+                android:id="@+id/tv_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginBottom="24dp"
+                android:textSize="12sp"
+                android:textColor="@color/colorLemon"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                android:text="입력정보를 확인해주세요."
+                />
 
             <TextView
             android:layout_width="wrap_content"
@@ -112,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="100dp"
                 android:hint="이름"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -134,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="100dp"
                 android:hint="학번"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -156,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="100dp"
                 android:hint="과"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -177,7 +197,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="48dp"
+                android:layout_marginEnd="100dp">
                 <View
                     android:layout_width="24dp"
                     android:layout_height="match_parent"/>
@@ -205,9 +226,6 @@
                     android:textSize="14sp"
                     android:text="남"
                     android:onClick="genderClick"/>
-                <View
-                    android:layout_width="24dp"
-                    android:layout_height="match_parent"/>
             </LinearLayout>
             <ImageView
                 android:id="@+id/basic_info_done"

@@ -106,7 +106,7 @@
         android:textSize="12sp"
         android:textColor="@color/colorWhite"
         android:lineSpacingExtra="6sp"
-        android:text="HereThere가 처음이신가요? 회원가입"
+        android:text="INHATAXI가 처음이신가요? 회원가입"
         android:onClick="customOnClick"
         />
 
