@@ -1,6 +1,7 @@
 package com.inhataxi;
 
 import com.inhataxi.response.ChattingRoomResponse;
+import com.inhataxi.response.SignUpResponse;
 import com.inhataxi.response.SuperResponse;
 import com.inhataxi.response.TestDetailResponse;
 import com.inhataxi.response.TestListResponse;
@@ -36,7 +37,10 @@ public interface RetrofitInterface {
     Observable<SuperResponse> postText(@Body RequestBody params);
 
     @POST("/inha/getRoom")
-    Callback<ChattingRoomResponse> postChatRoom(@Body RequestBody params);
+    Call<ChattingRoomResponse> postChatRoom(@Body RequestBody params);
+
+    @POST("/inha/signUp")
+    Call<SignUpResponse> postSignUp(@Body RequestBody params);
 
 //    Mixed Example
 //    @POST("test/{v1}/{v2}")

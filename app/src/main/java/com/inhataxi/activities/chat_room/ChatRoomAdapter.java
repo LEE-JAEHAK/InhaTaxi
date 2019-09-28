@@ -1,6 +1,8 @@
 package com.inhataxi.activities.chat_room;
 
 import android.content.Context;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,10 @@ import com.inhataxi.RetrofitInterface;
 import com.inhataxi.model.ChatRoomItem;
 import com.inhataxi.response.ChattingRoomResponse;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -85,15 +90,25 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
         final ChatRoomItem chatRoomItem = mChatList.get(position);
         holder.tvChatRoomMaker.setText(chatRoomItem.getName());
-        holder.tvChatRoomNum.setText(chatRoomItem.getCount());
-        int distance = (int) chatRoomItem.getDistance() * 1000;
-        holder.tvChatRoomDistance.setText(distance);
+        holder.tvChatRoomNum.setText(String.valueOf(chatRoomItem.getCount()));
+        int distance = (int) (chatRoomItem.getDistance() * 1000);
+        holder.tvChatRoomDistance.setText(String.valueOf(distance) + " m");
         holder.tvChatRoomDeparture.setText(chatRoomItem.getDeparture());
         holder.tvChatRoomDestination.setText(chatRoomItem.getDestination());
-        String time = chatRoomItem.getTime();
+        String time = chatRoomItem.getTime().substring(14);
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+//        Date date = simpleDateFormat.parse(chatRoomItem.getTime());
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(date);
+//        calendar.add(Calendar.HOUR, 3);
+//        calendar.add(Calendar.MINUTE, 30);
+
         holder.tvChatRoomTime.setText(time);
 
         Glide.with(mContext).load(chatRoomItem.getImageUrl()).placeholder(R.drawable.ic_profile_basic).into(holder.ivChatRoomProfile);
+
+        holder.ivChatRoomProfile.setBackground(new ShapeDrawable(new OvalShape()));
+        holder.ivChatRoomProfile.setClipToOutline(true);
 
         holder.tvChatRoomJoin.setOnClickListener(new View.OnClickListener() {
             @Override

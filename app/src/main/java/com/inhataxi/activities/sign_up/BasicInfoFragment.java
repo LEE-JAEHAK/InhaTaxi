@@ -1,10 +1,6 @@
 package com.inhataxi.activities.sign_up;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 
 import android.text.Html;
 import android.view.KeyEvent;
@@ -24,7 +20,7 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.inhataxi.activities.sign_up.SignUpActivity.mViewPagerSignUp;
-
+import static com.inhataxi.activities.BaseActivity.*;
 
 public class BasicInfoFragment extends BaseFragment {
 
@@ -33,7 +29,6 @@ public class BasicInfoFragment extends BaseFragment {
     TextView mTextViewError, mTextViewTitle;
     InputMethodManager mInputMethodManager;
     int mIndex = 0;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +42,7 @@ public class BasicInfoFragment extends BaseFragment {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     mInputMethodManager.hideSoftInputFromWindow(mEditTextEmail.getWindowToken(), 0);
                     checkValidation();
+                    sSignUpId =  mEditTextEmail.getText().toString();
                 }
                 return false;
             }
@@ -55,6 +51,7 @@ public class BasicInfoFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 checkValidation();
+                sSignUpId =  mEditTextEmail.getText().toString();
             }
         });
         return view;
