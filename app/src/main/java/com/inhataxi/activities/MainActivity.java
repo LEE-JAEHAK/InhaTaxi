@@ -21,10 +21,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.demono.AutoScrollViewPager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.inhataxi.R;
 import com.inhataxi.model.FineDust;
+import com.inhataxi.model.MainEventBanner;
 import com.inhataxi.model.Sky;
 import com.inhataxi.model.Station;
 import com.inhataxi.model.Temperature;
@@ -65,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_LOCATION = 2;
 
+
+    ArrayList<MainEventBanner> mArrayListMainEventBanner = new ArrayList<>();
+    AutoScrollViewPager mAutoViewPagerEventBanner;
+    AutoBannerAdapter mAutoBannerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +86,36 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 //        getMyLocation();
+        mArrayListMainEventBanner.add(new MainEventBanner("다문화융합연구소“글로컬다문화교육포럼 국내학자 초청특강” 개최", "http://www.inha.ac.kr/CrossEditor/binary/images/000006/%EB%8B%A4%EB%AC%B8%ED%99%94.jpg", "http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMzAyJTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
+        mArrayListMainEventBanner.add(new MainEventBanner("인천 섬으로 떠나는 봉사활동 ‘섬 프로젝트’ 본격 가동","http://www.inha.ac.kr/CrossEditor/binary/images/000006/%EC%82%AC%EC%A7%84_2.jpg","http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMjkxJTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
+        mArrayListMainEventBanner.add(new MainEventBanner("100회 전국체전 필승 각오 다져", "http://www.inha.ac.kr/CrossEditor/binary/images/000005/%EC%82%AC%EC%A7%84_1_9.jpg", "http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMjY4JTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
+        mArrayListMainEventBanner.add(new MainEventBanner("한국공학교육학회가 인정한 우수강의 교수로 선정", "http://www.inha.ac.kr/CrossEditor/binary/images/000005/%EA%B6%8C%EA%B5%AC%EC%9D%B8.jpg", "http://www.inha.ac.kr/kr/952/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkYxMSUyRjIxMjQ4JTJGYXJ0Y2xWaWV3LmRvJTNGcGFnZSUzRDElMjZzcmNoQ29sdW1uJTNEJTI2c3JjaFdyZCUzRCUyNmJic0NsU2VxJTNEJTI2YmJzT3BlbldyZFNlcSUzRCUyNnJnc0JnbmRlU3RyJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZwYXNzd29yZCUzRCUyNg=="));
+
+        mAutoBannerAdapter = new AutoBannerAdapter(mArrayListMainEventBanner, this);
+        mAutoViewPagerEventBanner.setAdapter(mAutoBannerAdapter);
+        mAutoViewPagerEventBanner.startAutoScroll();
+        mAutoViewPagerEventBanner.setSlideDuration(2000);
+//       뷰페이저 미리보기 설정//
+        mAutoViewPagerEventBanner.setClipToPadding(false);
+        int dpValue = 30;
+        float d = getResources().getDisplayMetrics().density;
+        int margin = (int) (dpValue * d);
+        mAutoViewPagerEventBanner.setPadding(margin, 0, margin, 0);
+        mAutoViewPagerEventBanner.setPageMargin(margin / 2);
+    }
+
+    void init(){
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerView = findViewById(R.id.drawer);
+        finedust = findViewById(R.id.finedust);
+        finedust2 = findViewById(R.id.finedust2);
+        finedustgrade = findViewById(R.id.finedustGrade);
+        finedustgrade2 = findViewById(R.id.finedustGrade2);
+        cmi = findViewById(R.id.cmi);
+        temp = findViewById(R.id.temp);
+        max_min_temp = findViewById(R.id.max_min_temp);
+        weatherimg = findViewById(R.id.weatherimg);
+        mAutoViewPagerEventBanner = findViewById(R.id.home_vp_event_banner);
     }
 
     private void getMyLocation(){
@@ -426,21 +463,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-    void init(){
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerView = findViewById(R.id.drawer);
-        finedust = findViewById(R.id.finedust);
-        finedust2 = findViewById(R.id.finedust2);
-        finedustgrade = findViewById(R.id.finedustGrade);
-        finedustgrade2 = findViewById(R.id.finedustGrade2);
-        cmi = findViewById(R.id.cmi);
-        temp = findViewById(R.id.temp);
-        max_min_temp = findViewById(R.id.max_min_temp);
-        weatherimg = findViewById(R.id.weatherimg);
-    }
 
     public void customOnClick(View view) {
         switch (view.getId()) {
