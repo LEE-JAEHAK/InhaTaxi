@@ -48,11 +48,15 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
         ViewHolder(View itemView) {
             super(itemView);
-            // 뷰 객체에 대한 참조. (hold strong reference)
 
             ivChatRoomProfile = itemView.findViewById(R.id.iv_chat_room_profile);
             tvChatRoomMaker = itemView.findViewById(R.id.tv_chat_room_name);
-
+            tvChatRoomNum = itemView.findViewById(R.id.tv_chat_room_member_num);
+            tvChatRoomDistance = itemView.findViewById(R.id.tv_chat_room_distance);
+            tvChatRoomDeparture = itemView.findViewById(R.id.tv_chat_room_departure);
+            tvChatRoomDestination = itemView.findViewById(R.id.tv_chat_room_destination);
+            tvChatRoomTime = itemView.findViewById(R.id.tv_chat_room_time);
+            tvChatRoomJoin = itemView.findViewById(R.id.tv_chat_roomt_join);
 
         }
     }
@@ -60,12 +64,13 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public ChatRoomAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mCartList = mCartList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
         return null;
     }
 

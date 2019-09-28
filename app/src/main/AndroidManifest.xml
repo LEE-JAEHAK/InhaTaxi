@@ -19,12 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activities.SchoolCertificationActivity"
+        <activity
+            android:name=".activities.SchoolCertificationActivity"
             android:screenOrientation="portrait"
-            android:usesCleartextTraffic="true"
-            android:theme="@style/SwipeAnimationTheme"/>
+            android:theme="@style/SwipeAnimationTheme"
+            android:usesCleartextTraffic="true" />
 
 
         <activity android:name=".activities.MapSearchActivity">
@@ -37,16 +39,16 @@
         <activity android:name=".activities.GoogleCloudeVisionActivity"></activity>
         <activity android:name=".activities.chat_room.ChatRoomActivity" />
         <activity android:name=".activities.SelectActivity" />
-        <activity android:name=".activities.MainActivity">
-        </activity>
-        <activity android:name=".activities.sign_up.SignUpActivity"
+        <activity android:name=".activities.MainActivity"></activity>
+        <activity
+            android:name=".activities.sign_up.SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SwipeAnimationTheme">
-        </activity>
-        <activity android:name=".activities.LoginActivity"
+            android:theme="@style/SwipeAnimationTheme"></activity>
+        <activity
+            android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.MapResultActivity"></activity>
 
         <uses-library
@@ -65,5 +67,4 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-
 </manifest>

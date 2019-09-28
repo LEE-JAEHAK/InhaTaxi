@@ -1,5 +1,6 @@
 package com.inhataxi.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,8 @@ public class SelectActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.rl_go_school:
                 //등교 액티비티로 이동
+                //Intent intent = new Intent(this, );
+                //intent.putExtra("select", 1);
                 break;
             case R.id.rl_go_home:
                 //하교 액티비티로 이동
