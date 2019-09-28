@@ -65,7 +65,11 @@ public class PasswordFragment extends BaseFragment {
         if (mEditTextPassword.getText().toString().equals(mEditTextPasswordCheck.getText().toString())) {
             if (passwordValidation(mEditTextPassword.getText().toString())) {
                 mTextViewError.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(getContext(), SchoolCertificationActivity.class));
+                sPassword = mEditTextPasswordCheck.getText().toString();
+                Intent intent = new Intent(getContext(), SchoolCertificationActivity.class);
+                intent.putExtra("id", sSignUpId);
+                intent.putExtra("password", sPassword);
+                startActivity(intent);
             } else {
                 mTextViewError.setText("영문, 숫자르 포함한 6~10자리의 비밀번호만 가능합니다");
                 mTextViewError.setVisibility(View.VISIBLE);

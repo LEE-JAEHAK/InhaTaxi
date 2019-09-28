@@ -9,8 +9,9 @@ import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
 import com.inhataxi.R;
+import com.inhataxi.activities.BaseActivity;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends BaseActivity {
 
     private TabLayout mTabLayout, mTabIndicator;
     public static NonSwipeableViewPager mViewPagerSignUp;

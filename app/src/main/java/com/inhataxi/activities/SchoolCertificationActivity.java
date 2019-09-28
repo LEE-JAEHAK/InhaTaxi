@@ -65,6 +65,10 @@ import com.inhataxi.PackageManagerUtils;
 import com.inhataxi.PermissionUtils;
 import com.inhataxi.R;
 import com.inhataxi.RetrofitInterface;
+import com.inhataxi.model.ChatRoom;
+import com.inhataxi.model.ChatRoomItem;
+import com.inhataxi.response.ChattingRoomResponse;
+import com.inhataxi.response.SignUpResponse;
 import com.inhataxi.response.SuperResponse;
 
 import org.json.JSONException;
@@ -90,11 +94,13 @@ import static com.inhataxi.activities.GoogleCloudeVisionActivity.CAMERA_IMAGE_RE
 import static com.inhataxi.activities.GoogleCloudeVisionActivity.CAMERA_PERMISSIONS_REQUEST;
 import static com.inhataxi.activities.GoogleCloudeVisionActivity.FILE_NAME;
 
-
 public class SchoolCertificationActivity extends BaseActivity {
 
     private Context mContext;
     private TabLayout mTabLayout;
+    String url;
+    String mGender;
+    Intent mIntent;
     private static final int PICK_FROM_CAMERA = 1; //카메라 촬영으로 사진 가져오기
     private static final int PICK_FROM_ALBUM = 2; //앨범에서 사진 가져오기
     private static final int CROP_FROM_CAMERA = 3; //가져온 사진을 자르기 위한 변수
@@ -141,17 +147,73 @@ public class SchoolCertificationActivity extends BaseActivity {
 
                 if (!mTextViewName.getText().toString().equals("") && !mTextViewCode.getText().toString().equals("") && !mTextViewDept.getText().toString().equals("") && genderCheck) {
                     try {
-                        uploadFileToFireBase(photoUri);
+                        postSignUp();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Intent intent = new Intent(SchoolCertificationActivity.this, WelcomeActivity.class);
-                    intent.putExtra("name", mTextViewName.getText().toString());
-                    startActivity(intent);
+
                 }
             }
         });
     }
+
+    void postSignUp() throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("id", mIntent.getExtras().getString("id"));
+        //Log.d("로그", "id: " + mIntent.getExtras().getString("id"));
+        params.put("name", mTextViewName.getText().toString());
+        //Log.d("로그", mTextViewName.getText().toString());
+        params.put("password", mIntent.getExtras().getString("password"));
+        //Log.d("로그", "pw: " + mIntent.getExtras().getString("password"));
+        params.put("card_url", url);
+        //Log.d("로그", url);
+        params.put("dept", mTextViewDept.getText().toString());
+        //Log.d("로그", mTextViewDept.getText().toString());
+        params.put("gender", mGender);
+        //Log.d("로그", mGender);
+        params.put("code", Integer.parseInt(mTextViewCode.getText().toString()));
+
+        //로딩 다이얼로그
+        //mDialog.show();
+
+        final RetrofitInterface retrofitInterface = getRetrofit(mContext).create(RetrofitInterface.class);
+        retrofitInterface.postSignUp(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<SignUpResponse>() {
+            @Override
+            public void onResponse(@NonNull final Call<SignUpResponse> call,
+                                   @NonNull final Response<SignUpResponse> response) {
+//                hideProgressDialog();
+                SignUpResponse signUpResponse = response.body();
+                if (signUpResponse == null) {
+                    showCustomToast("응답 없음");
+                }
+
+                if (signUpResponse.getCode() == 100) {
+                    //회원가입 성공
+                    showCustomToast("회원가입 성공");
+                    Intent intent = new Intent(SchoolCertificationActivity.this, WelcomeActivity.class);
+                    intent.putExtra("name", mTextViewName.getText().toString());
+                    startActivity(intent);
+                    finish();
+                } else {
+                    showCustomToast("회원가입 실패");
+                    Intent intent = new Intent(SchoolCertificationActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                //로딩 끝
+                //mDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<SignUpResponse> call,
+                                  @NonNull final Throwable throwable) {
+                //mDialog.dismiss();
+                showCustomToast("연결 실패");
+            }
+        });
+    }
+
+
 
     void init() {
         mTabLayout = findViewById(R.id.activity_school_certification_tab);
@@ -163,6 +225,7 @@ public class SchoolCertificationActivity extends BaseActivity {
         mButtonMan = findViewById(R.id.school_certification_btn_genderMan);
         mButtonWoman = findViewById(R.id.school_certification_btn_genderWoman);
         mImageViewDone = findViewById(R.id.basic_info_done);
+        mIntent = getIntent();
     }
 
     private boolean checkPermissions() {
@@ -423,10 +486,13 @@ public class SchoolCertificationActivity extends BaseActivity {
                     if (gender.equals("1")) {
                         mButtonMan.setPressed(true);
                         mButtonMan.setSelected(true);
+                        mGender = "M";
                         genderCheck = true;
                     } else if (gender.equals("2")) {
                         mButtonWoman.setPressed(true);
                         mButtonWoman.setSelected(true);
+                        mGender = "W";
+                        genderCheck = true;
                     }
                 }
                 int b = result.indexOf("성명");
@@ -449,6 +515,11 @@ public class SchoolCertificationActivity extends BaseActivity {
                 }
             }
             loadingDialog.dismiss();
+            try {
+                uploadFileToFireBase(photoUri);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -461,6 +532,7 @@ public class SchoolCertificationActivity extends BaseActivity {
                 mButtonMan.setPressed(false);
                 mButtonMan.setSelected(false);
                 genderCheck = true;
+                mGender = "W";
                 break;
             case R.id.school_certification_btn_genderMan:
                 mButtonMan.setPressed(true);
@@ -468,6 +540,7 @@ public class SchoolCertificationActivity extends BaseActivity {
                 mButtonWoman.setPressed(false);
                 mButtonWoman.setSelected(false);
                 genderCheck = true;
+                mGender = "M";
                 break;
         }
     }
@@ -754,6 +827,8 @@ public class SchoolCertificationActivity extends BaseActivity {
                             .into(mImageViewThumbnail);
 //                    mImageViewThumbnail
 
+                    url = downloadUri.toString();
+                    //Log.d("로그", url);
 
                     loadingDialog.dismiss();
 //                    mTextViewTitle.setText("이미지 첨부가\n완료되었습니다.");
