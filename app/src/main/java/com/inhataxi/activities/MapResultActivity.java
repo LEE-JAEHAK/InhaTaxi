@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +36,10 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     private ImageView backTv;
     private ImageView marker;
     private ViewGroup mapViewContainer;
+    private TextView logoTv;
+    private int state =0;
+    private double inhaLat = 37.451143;
+    private  double inhaLon = 126.656367;
 
     public String getName() {
         return name;
@@ -78,6 +83,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         addrTv = findViewById(R.id.map_result_default_addr_tv);
         backTv = findViewById(R.id.map_result_back_tv);
         marker = findViewById(R.id.marker_result);
+        logoTv = findViewById(R.id.map_result_logo_tv);
 
         mapView = new MapView(this);
         mapViewContainer.addView(mapView);
@@ -98,6 +104,15 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 
         marker.bringToFront();
         //Bring to marker from layout
+
+        intent = getIntent();
+        state = intent.getIntExtra("select", 1);
+        if(state ==1){
+            logoTv.setText("출발지를 선택해주세요");
+        }
+        else if(state ==2){
+            logoTv.setText("목적지를 선택해주세요");
+        }
     }
 
 
@@ -180,10 +195,33 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("addressMain", addrTv.getText().toString());
             editor.putString("addressDetail", detailEt.getText().toString());
-            editor.putString("x", String.valueOf(x));
-            editor.putString("y", String.valueOf(y));
+            editor.putString("lat", String.valueOf(x));
+            editor.putString("lon", String.valueOf(y));
+            if(state ==1) {
+//                "startLongitude" : 37.4650456,
+//                        "startLatitude" : 126.6785137,
+//                        "endLongitude" : 37.4500263,
+//                        "endLatitude" : 126.6512993,
+//                        "type" : 1
+                editor.putString("endLatitude", String.valueOf(inhaLat));
+                editor.putString("endLongitude", String.valueOf(inhaLon));
+                editor.putString("startLatitude", String.valueOf(x));
+                editor.putString("startLongitude", String.valueOf(y));
+                editor.putInt("type", state);
+                //목적지 고정
+            }
+            else if(state ==2){
+                editor.putString("startLatitude", String.valueOf(inhaLat));
+                editor.putString("startLongitude", String.valueOf(inhaLon));
+                editor.putString("endLatitude", String.valueOf(x));
+                editor.putString("endLongitude", String.valueOf(y));
+                editor.putInt("type", state);
+                // 출발지 고정
+            }
+            editor.putInt("type", state);
+            Log.i("Lat", String.valueOf(x));
             editor.commit();
-            finish();
+            //finish();
         }
         //store map information
     }
