@@ -17,7 +17,7 @@ public class ChattingRoomResponse {
     private String message;
 
     @SerializedName("result")
-    public ArrayList<ChatRoom> result;
+    private ArrayList<ChatRoom> result;
 
     public int getCode() {
         return code;
@@ -31,4 +31,7 @@ public class ChattingRoomResponse {
         return isSuccess;
     }
 
+    public ArrayList<ChatRoom> getResult() {
+        return result;
+    }
 }
