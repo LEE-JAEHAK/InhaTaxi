@@ -163,6 +163,15 @@
                 android:layout_marginBottom="10dp"
                 android:textSize="14sp"
                 android:theme="@style/EditTheme" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                android:layout_marginStart="24dp"
+                android:text="과"
+                android:layout_marginBottom="5dp"/>
         </LinearLayout>
     </ScrollView>
 
