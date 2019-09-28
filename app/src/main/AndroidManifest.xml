@@ -40,7 +40,13 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".activities.GoogleCloudeVisionActivity" />
-        <activity android:name=".activities.chat_room.ChatRoomActivity" />
+        <activity android:name=".activities.chat_room.ChatRoomActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.MainActivity"></activity>
         <activity
@@ -52,11 +58,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activities.MapResultActivity" />
 
