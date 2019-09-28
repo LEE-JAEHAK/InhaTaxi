@@ -191,12 +191,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         if (v.getId() == R.id.map_result_back_tv) {
             finish();
         } else if (v.getId() == R.id.map_result_finish_tv) {
-            SharedPreferences pref = getSharedPreferences("map", MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("addressMain", addrTv.getText().toString());
-            editor.putString("addressDetail", detailEt.getText().toString());
-            editor.putString("lat", String.valueOf(x));
-            editor.putString("lon", String.valueOf(y));
+
             if(state ==1) {
 //                "startLongitude" : 37.4650456,
 //                        "startLatitude" : 126.6785137,
@@ -224,9 +219,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                 finish();
                 // 출발지 고정
             }
-            editor.putInt("type", state);
-            Log.i("Lat", String.valueOf(x));
-            editor.commit();
+
             //finish();
         }
         //store map information

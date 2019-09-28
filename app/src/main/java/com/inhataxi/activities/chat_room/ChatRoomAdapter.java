@@ -32,7 +32,7 @@ import static com.inhataxi.IngaTaxiApp.getRetrofitMethod;
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<ChatRoomItem> mCartList;
+    private ArrayList<ChatRoomItem> mChatList;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,27 +62,52 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public ChatRoomAdapter(Context mContext) {
+    public ChatRoomAdapter(Context mContext, ArrayList<ChatRoomItem> mChatList) {
         this.mContext = mContext;
+        this.mChatList = mChatList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ChatRoomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        return null;
+        View view = inflater.inflate(R.layout.item_chat_room_list, parent, false);
+        ChatRoomAdapter.ViewHolder vh = new ChatRoomAdapter.ViewHolder(view);
+
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        final ChatRoomItem chatRoomItem = mChatList.get(position);
+        holder.tvChatRoomMaker.setText(chatRoomItem.getName());
+        holder.tvChatRoomNum.setText(chatRoomItem.getCount());
+        int distance = (int) chatRoomItem.getDistance() * 1000;
+        holder.tvChatRoomDistance.setText(distance);
+        holder.tvChatRoomDeparture.setText(chatRoomItem.getDeparture());
+        holder.tvChatRoomDestination.setText(chatRoomItem.getDestination());
+        String time = chatRoomItem.getTime();
+        holder.tvChatRoomTime.setText(time);
+
+        Glide.with(mContext).load(chatRoomItem.getImageUrl()).placeholder(R.drawable.ic_profile_basic).into(holder.ivChatRoomProfile);
+
+        holder.tvChatRoomJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //채팅방 참가
+            }
+        });
 
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return mCartList.size();
+        return mChatList.size();
     }
 
 }

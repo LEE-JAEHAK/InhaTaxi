@@ -3,11 +3,16 @@ package com.inhataxi.activities.chat_room;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.inhataxi.R;
 import com.inhataxi.RetrofitInterface;
+import com.inhataxi.model.ChatRoomItem;
 import com.inhataxi.response.ChattingRoomResponse;
+
+import java.util.ArrayList;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -18,12 +23,34 @@ import static com.inhataxi.IngaTaxiApp.*;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
+    ArrayList<ChatRoomItem> mArrayChat;
+    RecyclerView mRvChatRoom;
+    ChatRoomAdapter mChatRoomAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        this.initialize();
+
+        try {
+
+        } catch (Exception e) {
+
+        }
 
         //this.postChattingRoom();
+
+    }
+
+    void initialize() {
+
+        mArrayChat = new ArrayList<>();
+        mChatRoomAdapter = new ChatRoomAdapter(this, mArrayChat);
+
+        mRvChatRoom = findViewById(R.id.rv_chat_room);
+        mRvChatRoom.setAdapter(mChatRoomAdapter);
+
 
     }
 
@@ -36,10 +63,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-    /*
+/*
     void postChattingRoom(RequestBody params) {
         final RetrofitInterface chatRetrofitInterface = getRetrofitMethod(this);
-        chatRetrofitInterface.postChatRoom(RequestBody.create(MEDIA_TYPE_JSON, params.toString())).enqueue(new Callback<ChattingRoomResponse>() {
+        chatRetrofitInterface.postChatRoom(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<ChattingRoomResponse>() {
             @Override
             public void onResponse(Call<ChattingRoomResponse> call, Response<ChattingRoomResponse> response) {
 
@@ -51,7 +78,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                 //가져오기 성공
                 if (chattingRoomResponse.isSuccess()) {
 
-                    //가져오기 실패
+
+
+                //가져오기 실패
                 } else {
                 }
             }
