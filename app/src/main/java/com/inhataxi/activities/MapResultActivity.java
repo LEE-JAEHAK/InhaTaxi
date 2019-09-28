@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.inhataxi.R;
+import com.inhataxi.activities.chat_room.ChatRoomActivity;
 
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
@@ -198,24 +199,24 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 //                        "endLongitude" : 37.4500263,
 //                        "endLatitude" : 126.6512993,
 //                        "type" : 1
-                Intent intent = new Intent(this, MapResultActivity.class);
+                Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra("endLatitude", String.valueOf(inhaLat));
                 intent.putExtra("endLongitude", String.valueOf(inhaLon));
                 intent.putExtra("startLatitude", String.valueOf(x));
                 intent.putExtra("startLongitude", String.valueOf(y));
                 intent.putExtra("type", state);
-//                startActivity("민재 여기 ㄱㄱ");
+                startActivity(intent);
                 finish();
                 //목적지 고정
             }
             else if(state ==2){
-                Intent intent = new Intent(this, MapResultActivity.class);
+                Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra("startLatitude", String.valueOf(inhaLat));
                 intent.putExtra("startLongitude", String.valueOf(inhaLon));
                 intent.putExtra("endLatitude", String.valueOf(x));
                 intent.putExtra("endLongitude", String.valueOf(y));
                 intent.putExtra("type", state);
-//                startActivity(intent);
+                startActivity(intent);
                 finish();
                 // 출발지 고정
             }
