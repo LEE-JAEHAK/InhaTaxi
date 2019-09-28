@@ -1,5 +1,6 @@
 package com.inhataxi.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,6 +52,11 @@ import com.inhataxi.LoadingDialog;
 import com.inhataxi.PackageManagerUtils;
 import com.inhataxi.PermissionUtils;
 import com.inhataxi.R;
+import com.inhataxi.RetrofitInterface;
+import com.inhataxi.response.SuperResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -61,6 +67,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.inhataxi.IngaTaxiApp.MEDIA_TYPE_JSON;
+import static com.inhataxi.IngaTaxiApp.getRetrofit;
 import static com.inhataxi.activities.GoogleCloudeVisionActivity.CAMERA_IMAGE_REQUEST;
 import static com.inhataxi.activities.GoogleCloudeVisionActivity.CAMERA_PERMISSIONS_REQUEST;
 import static com.inhataxi.activities.GoogleCloudeVisionActivity.FILE_NAME;
@@ -600,6 +613,43 @@ public class SchoolCertificationActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+
+    void postAsk(String ask) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("type", 5);
+        params.put("askType", "");
+        params.put("content", ask);
+
+        final RetrofitInterface retrofitInterface = getRetrofit(mContext).create(RetrofitInterface.class);
+        retrofitInterface.postAsk(RequestBody.create( params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<SuperResponse>() {
+            @Override
+            public void onResponse(@NonNull final Call<SuperResponse> call,
+                                   @NonNull final Response<SuperResponse> response) {
+//                hideProgressDialog();
+                SuperResponse superResponse = response.body();
+                if (superResponse == null) {
+//                    showCustomToast(mContext, getString(R.string.network_error));
+                }
+                switch (superResponse.getCode()) {
+                    case 100:
+//                        showCustomToast(mContext, getString(R.string.ask_write_done));
+                        finish();
+                        break;
+                    case 201:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            @Override
+            public void onFailure(@NonNull final Call<SuperResponse> call,
+                                  @NonNull final Throwable throwable) {
+//                hideProgressDialog();
+//                showCustomToast(mContext, getString(R.string.network_error));
+            }
+        });
     }
 
 }

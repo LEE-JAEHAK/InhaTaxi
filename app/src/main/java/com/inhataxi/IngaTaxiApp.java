@@ -3,6 +3,7 @@ package com.inhataxi;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
@@ -27,6 +28,8 @@ public class IngaTaxiApp extends Application {
 
     public static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=uft-8");
     public static MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+    public static SharedPreferences sSharedPreferences = null;
+    public static String LOGIN_TYPE = "LOGIN-TYPE";
 
     public static String BASE_URL = "http://15.206.36.229/";
     // 싱글톤 데이터 리스트
@@ -46,7 +49,7 @@ public class IngaTaxiApp extends Application {
                     .readTimeout(5000, TimeUnit.MILLISECONDS)
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .addNetworkInterceptor(new StethoInterceptor())
-                    .addNetworkInterceptor(new XAccessTokenInterceptor(context)) // JWT 자동 헤더 전송
+                    .addNetworkInterceptor(new XAccessTokenInterceptor()) // JWT 자동 헤더 전송
                     .build();
 
             retrofit = new Retrofit.Builder()
@@ -72,7 +75,24 @@ public class IngaTaxiApp extends Application {
 //        }
 //    }
 
+    public static Retrofit getRetrofit(final Context context) {
+        if (retrofit == null) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .readTimeout(5000, TimeUnit.MILLISECONDS)
+                    .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                    .addNetworkInterceptor(new StethoInterceptor())
+                    .addNetworkInterceptor(new XAccessTokenInterceptor()) // JWT 자동 헤더 전송
+                    .build();
 
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+
+        return retrofit;
+    }
 
     public static String catchAllThrowable(final Context context, final Throwable throwable) {
         if (throwable instanceof NullPointerException) {
