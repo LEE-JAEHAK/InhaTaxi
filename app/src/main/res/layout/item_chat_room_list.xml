@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/list_chat_room_boarder">
+
+    <ImageView
+        android:id="@+id/iv_chat_room_profile"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_profile_basic" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="출발"
+                android:textColor="#008cf0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_chat_room_departure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="#000000"
+                android:text="인하대학교"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도착"
+                android:textColor="#008cf0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_chat_room_destination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="#000000"
+                android:text="주안역"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_member_num"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColor="#3399ff"
+                android:text="4"
+                />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_distance"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="45 m"
+                />
+            
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+        
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:gravity="center_vertical"
+            android:text="12분전"
+            android:textSize="25sp"
+            android:textColor="#ff6b6b"
+            />
+
+        <TextView
+            android:layout_width="85dp"
+            android:layout_height="30dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="참가 하기"
+            android:textColor="#008cf0"
+            android:onClick="onClick"
+            android:background="@drawable/btn_chat_room_join"/>
+        
+    </LinearLayout>
+
+
+</LinearLayout>

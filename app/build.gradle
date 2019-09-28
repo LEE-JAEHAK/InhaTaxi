@@ -17,6 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'armeabi'
+            universalApk false
+        }
+    }
+
 }
 
 dependencies {
@@ -75,6 +85,7 @@ dependencies {
     implementation 'devlight.io:navigationtabbar:1.2.5'
 
     implementation "androidx.drawerlayout:drawerlayout:1.0.0"
+    implementation files('libs\\libDaumMapAndroid.jar')
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'

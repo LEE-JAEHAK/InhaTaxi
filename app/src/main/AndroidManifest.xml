@@ -23,7 +23,11 @@
         tools:replace="android:allowBackup">
         <activity android:name=".activities.SchoolCertificationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SwipeAnimationTheme">
+            android:usesCleartextTraffic="true"
+            android:theme="@style/SwipeAnimationTheme"/>
+
+
+        <activity android:name=".activities.MapSearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +46,14 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.GoogleCloudeVisionActivity">
         </activity>
+        <activity android:name=".activities.MapResultActivity"></activity>
 
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="a421f2824f3f07b1f5dd5e6bb129f274" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.inhataxi.provider"
