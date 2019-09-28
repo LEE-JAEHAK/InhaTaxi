@@ -1,34 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
+    buildToolsVersion "29.0.1"
     defaultConfig {
-        applicationId "com.newvement.android.newver"
+        applicationId "com.inhataxi"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode new Date().format('yyMMddHHmm').toInteger()
-        versionName "0.0.1"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        buildTypes.each {
-//            it.buildConfigField 'String', 'API_KEY', ApiKey
-            it.buildConfigField 'String', 'API_KEY', '"AIzaSyDWgCoxrW3F93kneyob_0zFWvy6JngwM00"'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'// Server Network Lib
@@ -53,8 +50,7 @@ dependencies {
 
     //QR
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+
     implementation 'com.rmtheis:tess-two:5.4.1'
 
     implementation 'com.github.bumptech.glide:glide:3.7.0'
