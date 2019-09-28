@@ -78,7 +78,7 @@
                 android:textSize="12sp"
                 android:textColor="@color/colorWhite"
                 android:lineSpacingExtra="6sp"
-                android:text="학생을 인증할 수 있는 증명서 사진을\n제출해주세요."
+                android:text="학생을 인증할 수 있는 학생증 사진을\n제출해주세요."
                 />
 
             <ImageView
@@ -91,7 +91,7 @@
 
             <ImageView
                 android:id="@+id/activity_school_certification_iv_thumbnail"
-                android:layout_width="120dp"
+                android:layout_width="240dp"
                 android:layout_height="120dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginStart="24dp"
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="100dp"
+                android:layout_marginEnd="24dp"
                 android:hint="이름"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="100dp"
+                android:layout_marginEnd="24dp"
                 android:hint="학번"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -148,7 +148,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp"
                 android:layout_marginStart="24dp"
-                android:text="과"
+                android:text="학과"
                 android:layout_marginBottom="5dp"/>
 
             <EditText
@@ -156,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="100dp"
+                android:layout_marginEnd="24dp"
                 android:hint="과"
                 android:textColorHint="@color/colorGray"
                 android:textColor="@color/colorWhite"
@@ -170,8 +170,52 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp"
                 android:layout_marginStart="24dp"
-                android:text="과"
+                android:text="성별"
                 android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"/>
+
+                <Button
+                    android:id="@+id/school_certification_btn_genderWoman"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/age_button_background"
+                    android:onClick="genderClick"
+                    android:text="여"
+                    android:textColor="@drawable/age_button_color"
+                    android:textSize="14sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"/>
+                <Button
+                    android:id="@+id/school_certification_btn_genderMan"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/age_button_background"
+                    android:textColor="@drawable/age_button_color"
+                    android:textSize="14sp"
+                    android:text="남"
+                    android:onClick="genderClick"/>
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/basic_info_done"
+                android:layout_marginBottom="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/btn_done" />
         </LinearLayout>
     </ScrollView>
 

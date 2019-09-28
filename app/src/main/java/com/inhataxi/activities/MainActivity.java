@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        getMyLocation();
+//        getMyLocation();
     }
 
     private void getMyLocation(){

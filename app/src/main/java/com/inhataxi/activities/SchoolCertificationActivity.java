@@ -25,6 +25,8 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -81,8 +83,8 @@ public class SchoolCertificationActivity extends BaseActivity {
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}; //권한 설정 변수
     private static final int MULTIPLE_PERMISSIONS = 101; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
     private Uri photoUri;
-    private ImageView mImageViewThumbnail, mImageViewButton;
-    private TextView mTextViewTitle, mTextViewContent;
+    private ImageView mImageViewThumbnail, mImageViewButton, mImageViewDone;
+    private EditText mTextViewName, mTextViewCode, mTextViewDept;
     private int mMode = BEFORE_IMAGE;
 
     private static final int GALLERY_IMAGE_REQUEST = 1;
@@ -94,6 +96,10 @@ public class SchoolCertificationActivity extends BaseActivity {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
 
+    private Button mButtonMan, mButtonWoman;
+
+    private boolean genderCheck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,14 +108,28 @@ public class SchoolCertificationActivity extends BaseActivity {
         init();
         initTab();
         checkPermissions();
+        mImageViewDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mTextViewName.getText().toString().equals("") && !mTextViewCode.getText().toString().equals("") && !mTextViewDept.getText().toString().equals("") && genderCheck){
+                    Intent intent = new Intent(SchoolCertificationActivity.this, WelcomeActivity.class);
+                    intent.putExtra("name", mTextViewName.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     void init() {
         mTabLayout = findViewById(R.id.activity_school_certification_tab);
         mImageViewThumbnail = findViewById(R.id.activity_school_certification_iv_thumbnail);
         mImageViewButton = findViewById(R.id.activity_school_certification_iv_upload);
-        mTextViewTitle = findViewById(R.id.activity_school_certification_tv_title);
-        mTextViewContent = findViewById(R.id.activity_school_certification_tv_content);
+        mTextViewName = findViewById(R.id.school_certification_et_name);
+        mTextViewCode = findViewById(R.id.school_certification_et_code);
+        mTextViewDept = findViewById(R.id.school_certification_et_dept);
+        mButtonMan = findViewById(R.id.school_certification_btn_genderMan);
+        mButtonWoman = findViewById(R.id.school_certification_btn_genderWoman);
+        mImageViewDone = findViewById(R.id.basic_info_done);
     }
 
     private boolean checkPermissions() {
@@ -357,18 +377,57 @@ public class SchoolCertificationActivity extends BaseActivity {
             if (activity != null && !activity.isFinishing()) {
                 System.out.println(result);
                 int a = result.indexOf("-");
-                String gender = result.substring(a+1, a+2);
-                System.out.println("a= " + gender);
+                if(a!=-1){
+                    String gender = result.substring(a+1, a+2);
+                    System.out.println("a= " + gender);
+                    if(gender.equals("1")){
+                        mButtonMan.setPressed(true);
+                        mButtonMan.setSelected(true);
+                        genderCheck=true;
+                    }
+                    else if(gender.equals("2")){
+                        mButtonWoman.setPressed(true);
+                        mButtonWoman.setSelected(true);
+                    }
+                }
                 int b = result.indexOf("성명");
-                String name = result.substring(b+3, b+6);
-                System.out.println("b= " + name);
+                if(b!=-1){
+                    String name = result.substring(b+3, b+6);
+                    System.out.println("b= " + name);
+                    mTextViewName.setText(name);
+                }
                 int c = result.indexOf("학과");
-                String dept = result.substring(c+3, c+9);
-                System.out.println("c= " + dept);
+                if(c!=-1){
+                    String dept = result.substring(c+3, c+9);
+                    System.out.println("c= " + dept);
+                    mTextViewDept.setText(dept);
+                }
                 int d = result.indexOf("121");
-                String code = result.substring(d, d+8);
-                System.out.println("d= "+ code);
+                if(d!=-1){
+                    String code = result.substring(d, d+8);
+                    System.out.println("d= "+ code);
+                    mTextViewCode.setText(code);
+                }
             }
+        }
+    }
+
+    public void genderClick(View view){
+        switch (view.getId()){
+            case R.id.school_certification_btn_genderWoman:
+                mButtonWoman.setPressed(true);
+                mButtonWoman.setSelected(true);
+                mButtonMan.setPressed(false);
+                mButtonMan.setSelected(false);
+                genderCheck=true;
+                break;
+            case R.id.school_certification_btn_genderMan:
+                mButtonMan.setPressed(true);
+                mButtonMan.setSelected(true);
+                mButtonWoman.setPressed(false);
+                mButtonWoman.setSelected(false);
+                genderCheck=true;
+                break;
         }
     }
 
