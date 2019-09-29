@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,9 +49,10 @@ public class ChatActivity extends AppCompatActivity {
         CHAT_NAME = intent.getStringExtra("chatName");
         USER_NAME = intent.getStringExtra("userName");
 
+        System.out.println(CHAT_NAME+", "+USER_NAME+"LOG");
         Log.d("aaa", CHAT_NAME+", "+USER_NAME+"aaa");
 
-//
+
 //        CHAT_NAME = "aaa";
 //        USER_NAME = "user";
         // 채팅 방 입장

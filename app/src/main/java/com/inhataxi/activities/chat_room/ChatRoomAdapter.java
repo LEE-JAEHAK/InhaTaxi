@@ -35,6 +35,7 @@ import retrofit2.Response;
 
 import static com.inhataxi.IngaTaxiApp.MEDIA_TYPE_JSON;
 import static com.inhataxi.IngaTaxiApp.getRetrofitMethod;
+import static com.inhataxi.activities.LoginActivity.userName;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
 
@@ -118,7 +119,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
                 Intent intent = new Intent(mContext, ChatActivity.class);
                 intent.putExtra("chatName", chatRoomItem.getUrl());
-                intent.putExtra("userName", "me");
+                intent.putExtra("userName", userName);
                 mContext.startActivity(intent);
                 //채팅방 참가
             }
