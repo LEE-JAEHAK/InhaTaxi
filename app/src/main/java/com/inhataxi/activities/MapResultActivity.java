@@ -90,8 +90,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         //Bring to values from MapSearchActivity
 
         mapViewContainer = (ViewGroup) findViewById(R.id.map_show);
-        detailEt = findViewById(R.id.map_result_detail_addr_et);
-        finishBt = findViewById(R.id.map_result_finish_tv);
+        finishBt = findViewById(R.id.map_result_find_tv);
         addrTv = findViewById(R.id.map_result_default_addr_tv);
         backTv = findViewById(R.id.map_result_back_tv);
         marker = findViewById(R.id.marker_result);
@@ -202,31 +201,14 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     public void onClick(View v) {
         if (v.getId() == R.id.map_result_back_tv) {
             finish();
-        } else if (v.getId() == R.id.map_result_finish_tv) {
+        } else if (v.getId() == R.id.map_result_find_tv) {
 
-            if (state == 1) {                //목적지 고정
-
-                if (mode == 0) {//방 만들기일때
-                    Random rnd = new Random();
-                    StringBuffer buf = new StringBuffer();
-                    for (int i = 0; i < 10; i++) {
-                        // rnd.nextBoolean() 는 랜덤으로 true, false 를 리턴. true일 시 랜덤 한 소문자를, false 일 시 랜덤 한 숫자를 StringBuffer 에 append 한다.
-                        if (rnd.nextBoolean()) {
-                            buf.append((char) ((int) (rnd.nextInt(26)) + 97));
-                        } else {
-                            buf.append((rnd.nextInt(10)));
-                        }
-                    }
-                    Intent intent = new Intent(this, ChatActivity.class);
-                    intent.putExtra("chatName", buf.toString());
-                    intent.putExtra("userName", "me");
-
-                    startActivity(intent);
-
-                }
-
-
-            } else { //조회일떄
+            if (state == 1) {
+//                "startLongitude" : 37.4650456,
+//                        "startLatitude" : 126.6785137,
+//                        "endLongitude" : 37.4500263,
+//                        "endLatitude" : 126.6512993,
+//                        "type" : 1
                 Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra("endLatitude", String.valueOf(inhaLat));
                 intent.putExtra("endLongitude", String.valueOf(inhaLon));
@@ -235,20 +217,43 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                 intent.putExtra("type", state);
                 startActivity(intent);
                 finish();
+                //목적지 고정
+            } else if (state == 2) {
+                Intent intent = new Intent(this, ChatRoomActivity.class);
+                intent.putExtra("startLatitude", String.valueOf(inhaLat));
+                intent.putExtra("startLongitude", String.valueOf(inhaLon));
+                intent.putExtra("endLatitude", String.valueOf(x));
+                intent.putExtra("endLongitude", String.valueOf(y));
+                intent.putExtra("type", state);
+                startActivity(intent);
+                finish();
+                // 출발지 고정
             }
 
-        } else if (state == 2) {                // 출발지 고정
-            Intent intent = new Intent(this, ChatRoomActivity.class);
-            intent.putExtra("startLatitude", String.valueOf(inhaLat));
-            intent.putExtra("startLongitude", String.valueOf(inhaLon));
-            intent.putExtra("endLatitude", String.valueOf(x));
-            intent.putExtra("endLongitude", String.valueOf(y));
-            intent.putExtra("type", state);
-            startActivity(intent);
-            finish();
-        }
+            //finish();
+        } else if (v.getId() == R.id.map_result_make_tv) {
 
-        //finish();
+            // API통신해서 방만들기 쏴줘야함
+            // body에서 url에는 아래에있는  buf.toString() 넣으면댐
+            if (mode == 0) {//방 찾기
+                Random rnd = new Random();
+                StringBuffer buf = new StringBuffer();
+                for (int i = 0; i < 10; i++) {
+                    // rnd.nextBoolean() 는 랜덤으로 true, false 를 리턴. true일 시 랜덤 한 소문자를, false 일 시 랜덤 한 숫자를 StringBuffer 에 append 한다.
+                    if (rnd.nextBoolean()) {
+                        buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    } else {
+                        buf.append((rnd.nextInt(10)));
+                    }
+                }
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("chatName", buf.toString());
+                intent.putExtra("userName", "me");
+
+                startActivity(intent);
+
+            }
+        }
+        //store map information
     }
-    //store map information
 }
