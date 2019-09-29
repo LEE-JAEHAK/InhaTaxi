@@ -28,7 +28,7 @@ public class ChatRoom {
     @SerializedName("profile_url")
     private String imageUrl;
 
-    @SerializedName("url")
+    @SerializedName("open_chat_url")
     private String url;
 
     public String getName() {
