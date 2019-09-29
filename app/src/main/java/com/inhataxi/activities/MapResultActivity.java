@@ -289,13 +289,29 @@ public class MapResultActivity extends BaseActivity implements MapView.MapViewEv
 
     void postMakeRoom(final String roomUrl) throws JSONException {
         JSONObject params = new JSONObject();
-        params.put("userNo", userNo);
-        params.put("startLongitude", String.valueOf(inhaLon));
-        params.put("startLatitude", String.valueOf(inhaLat));
-        params.put("endLongitude", String.valueOf(y));
-        params.put("endLatitude", String.valueOf(x));
-        params.put("type", state);
-        params.put("url", roomUrl);
+        if(state == 1) {
+            params.put("userNo", userNo);
+            params.put("endLongitude", String.valueOf(inhaLon));
+            params.put("endLatitude", String.valueOf(inhaLat));
+            params.put("startLongitude", String.valueOf(y));
+            params.put("startLatitude", String.valueOf(x));
+//            String[] temp = addrTv.getText().toString().split(" ");
+            params.put("startString", addrTv.getText().toString());
+            params.put("endString", "인하대");
+            params.put("type", state);
+            params.put("url", roomUrl);
+        }else if(state == 2){
+            params.put("userNo", userNo);
+            params.put("startLongitude", String.valueOf(inhaLon));
+            params.put("startLatitude", String.valueOf(inhaLat));
+            params.put("endLongitude", String.valueOf(y));
+            params.put("endLatitude", String.valueOf(x));
+//            String[] temp = addrTv.getText().toString().split(" ");
+            params.put("endString", addrTv.getText().toString());
+            params.put("startString", "인하대");
+            params.put("type", state);
+            params.put("url", roomUrl);
+        }
 
         //로딩 다이얼로그
         //mDialog.show();

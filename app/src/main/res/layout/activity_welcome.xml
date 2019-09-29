@@ -91,7 +91,7 @@
         android:textSize="12sp"
         android:textColor="@color/colorWhite"
         android:lineSpacingExtra="6sp"
-        android:text="Here there에 오신 것을 환영합니다.\n이제부터 교환학생에 관한 모든 정보를 얻으실 수 있을 거예요."
+        android:text="Inha Taxi에 오신 것을 환영합니다."
         />
 
     <ImageView

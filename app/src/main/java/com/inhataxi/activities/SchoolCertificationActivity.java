@@ -192,7 +192,7 @@ public class SchoolCertificationActivity extends BaseActivity {
                 if (signUpResponse.getCode() == 100) {
                     //회원가입 성공
                     showCustomToast(signUpResponse.getMessage());
-                    Intent intent = new Intent(SchoolCertificationActivity.this, WelcomeActivity.class);
+                    Intent intent = new Intent(SchoolCertificationActivity.this, LoginActivity.class);
                     intent.putExtra("name", mTextViewName.getText().toString());
                     startActivity(intent);
                     finish();
