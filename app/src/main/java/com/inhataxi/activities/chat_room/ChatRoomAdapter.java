@@ -117,7 +117,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             public void onClick(View view) {
 
                 Intent intent = new Intent(mContext, ChatActivity.class);
-                intent.putExtra("chatName", chatRoomItem.getImageUrl());
+                intent.putExtra("chatName", chatRoomItem.getUrl());
                 intent.putExtra("userName", "me");
                 mContext.startActivity(intent);
                 //채팅방 참가

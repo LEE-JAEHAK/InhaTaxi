@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -47,9 +48,16 @@ public class ChatActivity extends AppCompatActivity {
         CHAT_NAME = intent.getStringExtra("chatName");
         USER_NAME = intent.getStringExtra("userName");
 
-//        CHAT_NAME = "aaa";
-//        USER_NAME = "user";
+        Log.d("aaa", CHAT_NAME+", "+USER_NAME+"aaa");
+
+
+        CHAT_NAME = "aaa";
+        USER_NAME = "user";
         // 채팅 방 입장
+
+//        Log.d(CHAT_NAME, USER_NAME+"aaa");
+
+
         openChat(CHAT_NAME);
 
         // 메시지 전송 버튼에 대한 클릭 리스너 지정

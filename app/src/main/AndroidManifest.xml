@@ -36,21 +36,11 @@
             android:theme="@style/SwipeAnimationTheme"
             android:usesCleartextTraffic="true" />
         <activity android:name=".activities.MapSearchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activities.GoogleCloudeVisionActivity" />
         <activity android:name=".activities.chat_room.ChatRoomActivity"></activity>
         <activity android:name=".activities.SelectActivity" />
         <activity android:name=".activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.sign_up.SignUpActivity"
@@ -62,7 +52,13 @@
             android:theme="@style/SwipeAnimationTheme"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".activities.MapResultActivity" />
-        <activity android:name=".activities.SplashActivity"></activity>
+        <activity android:name=".activities.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <uses-library
             android:name="org.apache.http.legacy"

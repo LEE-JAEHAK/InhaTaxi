@@ -55,4 +55,8 @@ public class ChatRoomItem {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
