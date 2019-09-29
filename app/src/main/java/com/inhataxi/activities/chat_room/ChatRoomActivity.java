@@ -117,7 +117,7 @@ public class ChatRoomActivity extends BaseActivity {
                     for (int i = 0; i < chattingRoomResponse.getResult().size(); i++) {
                         ChatRoom room = chattingRoomResponse.getResult().get(i);
                         ChatRoomItem temp = new ChatRoomItem(room.getName(), room.getDept(), room.getCount(), room.getTime(), room.getDistance(),
-                                room.getDeparture(), room.getDestination(), room.getImageUrl());
+                                room.getDeparture(), room.getDestination(), room.getImageUrl(), room.getUrl());
                         mArrayChat.add(temp);
                         //mArrayChat.add(temp);
                         //mArrayChat.add(temp);

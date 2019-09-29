@@ -248,7 +248,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                 }
                 Intent intent = new Intent(this, ChatActivity.class);
                 intent.putExtra("chatName", buf.toString());
-                intent.putExtra("userName", "me");
+                intent.putExtra("userName", "영진");
 
                 startActivity(intent);
 

@@ -28,6 +28,9 @@ public class ChatRoom {
     @SerializedName("profile_url")
     private String imageUrl;
 
+    @SerializedName("url")
+    private String url;
+
     public String getName() {
         return name;
     }
@@ -59,4 +62,10 @@ public class ChatRoom {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
+
+
