@@ -24,6 +24,9 @@ import net.daum.mf.map.api.MapView;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.lang.Math;
+import java.util.Random;
+
 
 public class MapResultActivity extends AppCompatActivity implements MapView.MapViewEventListener, View.OnClickListener {
     private MapView mapView;
@@ -38,31 +41,39 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     private ImageView marker;
     private ViewGroup mapViewContainer;
     private TextView logoTv;
-    private int state =0;
+    private int state = 0;
+    private int mode = 0;
     private double inhaLat = 37.451143;
-    private  double inhaLon = 126.656367;
+    private double inhaLon = 126.656367;
 
     public String getName() {
         return name;
     }
+
     public String getAddress() {
         return address;
     }
+
     public double getX() {
         return x;
     }
+
     public double getY() {
         return y;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public void setX(double x) {
         this.x = x;
     }
+
     public void setY(double y) {
         this.y = y;
     }
@@ -108,10 +119,10 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 
         intent = getIntent();
         state = intent.getIntExtra("select", 1);
-        if(state ==1){
+        mode = intent.getIntExtra("mode", 0);
+        if (state == 1) {
             logoTv.setText("출발지를 선택해주세요");
-        }
-        else if(state ==2){
+        } else if (state == 2) {
             logoTv.setText("목적지를 선택해주세요");
         }
     }
@@ -162,16 +173,16 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
         Geocoder geo = new Geocoder(this, Locale.getDefault());
         List<Address> names = null;
         try {
-            names = geo.getFromLocation( mapView.getMapCenterPoint().getMapPointGeoCoord().latitude,  mapView.getMapCenterPoint().getMapPointGeoCoord().longitude, 10);
+            names = geo.getFromLocation(mapView.getMapCenterPoint().getMapPointGeoCoord().latitude, mapView.getMapCenterPoint().getMapPointGeoCoord().longitude, 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (names.size() > 0) {
             String tmp = names.get(0).getAddressLine(0);
-            if(tmp.contains("대한민국 ")){
+            if (tmp.contains("대한민국 ")) {
                 tmp = tmp.replace("대한민국 ", "");
             }
-            if(tmp.contains("서울특별시")){
+            if (tmp.contains("서울특별시")) {
                 tmp = tmp.replace("서울특별시 ", "");
             }
             //Process long address line
@@ -193,12 +204,29 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
             finish();
         } else if (v.getId() == R.id.map_result_finish_tv) {
 
-            if(state ==1) {
-//                "startLongitude" : 37.4650456,
-//                        "startLatitude" : 126.6785137,
-//                        "endLongitude" : 37.4500263,
-//                        "endLatitude" : 126.6512993,
-//                        "type" : 1
+            if (state == 1) {                //목적지 고정
+
+                if (mode == 0) {//방 만들기일때
+                    Random rnd = new Random();
+                    StringBuffer buf = new StringBuffer();
+                    for (int i = 0; i < 10; i++) {
+                        // rnd.nextBoolean() 는 랜덤으로 true, false 를 리턴. true일 시 랜덤 한 소문자를, false 일 시 랜덤 한 숫자를 StringBuffer 에 append 한다.
+                        if (rnd.nextBoolean()) {
+                            buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+                        } else {
+                            buf.append((rnd.nextInt(10)));
+                        }
+                    }
+                    Intent intent = new Intent(this, ChatActivity.class);
+                    intent.putExtra("chatName", buf.toString());
+                    intent.putExtra("userName", "me");
+
+                    startActivity(intent);
+
+                }
+
+
+            } else { //조회일떄
                 Intent intent = new Intent(this, ChatRoomActivity.class);
                 intent.putExtra("endLatitude", String.valueOf(inhaLat));
                 intent.putExtra("endLongitude", String.valueOf(inhaLon));
@@ -207,24 +235,20 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                 intent.putExtra("type", state);
                 startActivity(intent);
                 finish();
-                //목적지 고정
-            }
-            else if(state ==2){
-                Intent intent = new Intent(this, ChatRoomActivity.class);
-                intent.putExtra("startLatitude", String.valueOf(inhaLat));
-                intent.putExtra("startLongitude", String.valueOf(inhaLon));
-                intent.putExtra("endLatitude", String.valueOf(x));
-                intent.putExtra("endLongitude", String.valueOf(y));
-                intent.putExtra("type", state);
-                startActivity(intent);
-                finish();
-                // 출발지 고정
             }
 
-            //finish();
+        } else if (state == 2) {                // 출발지 고정
+            Intent intent = new Intent(this, ChatRoomActivity.class);
+            intent.putExtra("startLatitude", String.valueOf(inhaLat));
+            intent.putExtra("startLongitude", String.valueOf(inhaLon));
+            intent.putExtra("endLatitude", String.valueOf(x));
+            intent.putExtra("endLongitude", String.valueOf(y));
+            intent.putExtra("type", state);
+            startActivity(intent);
+            finish();
         }
-        //store map information
+
+        //finish();
     }
-
-
+    //store map information
 }
