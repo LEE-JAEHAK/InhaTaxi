@@ -22,10 +22,10 @@
 
             <ImageView
                 android:id="@+id/fragment_home_btn_hamburger"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="10dp"
                 android:onClick="customOnClick"
                 app:srcCompat="@drawable/btn_hamberger" />
@@ -39,6 +39,7 @@
                 android:lineSpacingExtra="8sp"
                 android:text="INHATAXI"
                 android:textColor="@color/colorAccent"
+                android:layout_marginStart="20dp"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
