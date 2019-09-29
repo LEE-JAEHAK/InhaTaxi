@@ -24,6 +24,9 @@ import net.daum.mf.map.api.MapView;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.lang.Math;
+import java.util.Random;
+
 
 public class MapResultActivity extends AppCompatActivity implements MapView.MapViewEventListener, View.OnClickListener {
     private MapView mapView;
@@ -39,6 +42,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
     private ViewGroup mapViewContainer;
     private TextView logoTv;
     private int state = 0;
+    private int mode = 0;
     private double inhaLat = 37.451143;
     private double inhaLon = 126.656367;
 
@@ -114,6 +118,7 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
 
         intent = getIntent();
         state = intent.getIntExtra("select", 1);
+        mode = intent.getIntExtra("mode", 0);
         if (state == 1) {
             logoTv.setText("출발지를 선택해주세요");
         } else if (state == 2) {
@@ -228,8 +233,27 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
             //finish();
         } else if (v.getId() == R.id.map_result_make_tv) {
 
+            // API통신해서 방만들기 쏴줘야함
+            // body에서 url에는 아래에있는  buf.toString() 넣으면댐
+            if (mode == 0) {//방 찾기
+                Random rnd = new Random();
+                StringBuffer buf = new StringBuffer();
+                for (int i = 0; i < 10; i++) {
+                    // rnd.nextBoolean() 는 랜덤으로 true, false 를 리턴. true일 시 랜덤 한 소문자를, false 일 시 랜덤 한 숫자를 StringBuffer 에 append 한다.
+                    if (rnd.nextBoolean()) {
+                        buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    } else {
+                        buf.append((rnd.nextInt(10)));
+                    }
+                }
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("chatName", buf.toString());
+                intent.putExtra("userName", "me");
+
+                startActivity(intent);
+
+            }
         }
         //store map information
     }
-
 }
