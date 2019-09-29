@@ -62,7 +62,7 @@ public class LoginActivity extends BaseActivity {
         mContext = this;
         init();
         mTextViewFind.setText(Html.fromHtml("<u>이메일/비밀번호 찾기</u>"));
-        mTextViewSignUp.setText(Html.fromHtml("HereThere가 처음이신가요? <u>회원가입</u>"));
+        mTextViewSignUp.setText(Html.fromHtml("INHATAXI가 처음이신가요? <u>회원가입</u>"));
 
         Intent intent = getIntent();
         boolean check = intent.getBooleanExtra("logout", false);
