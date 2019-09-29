@@ -50,9 +50,9 @@ public class ChatActivity extends AppCompatActivity {
 
         Log.d("aaa", CHAT_NAME+", "+USER_NAME+"aaa");
 
-
-        CHAT_NAME = "aaa";
-        USER_NAME = "user";
+//
+//        CHAT_NAME = "aaa";
+//        USER_NAME = "user";
         // 채팅 방 입장
 
 //        Log.d(CHAT_NAME, USER_NAME+"aaa");
