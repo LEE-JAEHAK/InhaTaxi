@@ -73,7 +73,7 @@ public class ChatRoomActivity extends BaseActivity {
     }
 
     void postChattingRoom() throws JSONException {
-        JSONObject params = new JSONObject();
+        final JSONObject params = new JSONObject();
 
         params.put("startLongitude", Double.valueOf(mIntent.getExtras().getString("startLatitude")));
         params.put("startLatitude", Double.valueOf(mIntent.getExtras().getString("startLongitude")));
@@ -107,6 +107,8 @@ public class ChatRoomActivity extends BaseActivity {
             public void onResponse(@NonNull final Call<ChattingRoomResponse> call,
                                    @NonNull final Response<ChattingRoomResponse> response) {
 //                hideProgressDialog();
+
+                Log.d("로그", params.toString());
                 ChattingRoomResponse chattingRoomResponse = response.body();
                 if (chattingRoomResponse == null) {
                     showCustomToast("응답 없음");
@@ -117,7 +119,9 @@ public class ChatRoomActivity extends BaseActivity {
                     for (int i = 0; i < chattingRoomResponse.getResult().size(); i++) {
                         ChatRoom room = chattingRoomResponse.getResult().get(i);
                         ChatRoomItem temp = new ChatRoomItem(room.getName(), room.getDept(), room.getCount(), room.getTime(), room.getDistance(),
-                                room.getDeparture(), room.getDestination(), room.getImageUrl());
+                                room.getDeparture(), room.getDestination(), room.getImageUrl(), room    .getUrl());
+
+                        Log.d("로그",room.getUrl());
                         mArrayChat.add(temp);
                         //mArrayChat.add(temp);
                         //mArrayChat.add(temp);

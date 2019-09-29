@@ -264,6 +264,9 @@ public class MapResultActivity extends BaseActivity implements MapView.MapViewEv
                         buf.append((rnd.nextInt(10)));
                     }
                 }
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("chatName", buf.toString());
+                intent.putExtra("userName", "영진");
 
                 //방 만들기 api
                 try {
