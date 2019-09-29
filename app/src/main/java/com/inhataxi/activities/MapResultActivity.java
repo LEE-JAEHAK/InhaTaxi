@@ -13,13 +13,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.inhataxi.R;
+import com.inhataxi.RetrofitInterface;
 import com.inhataxi.activities.chat_room.ChatRoomActivity;
+import com.inhataxi.response.MakeRoomResponse;
+import com.inhataxi.response.SignUpResponse;
 
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,8 +34,19 @@ import java.util.Locale;
 import java.lang.Math;
 import java.util.Random;
 
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MapResultActivity extends AppCompatActivity implements MapView.MapViewEventListener, View.OnClickListener {
+import static com.inhataxi.IngaTaxiApp.MEDIA_TYPE_JSON;
+import static com.inhataxi.IngaTaxiApp.getRetrofit;
+import static com.inhataxi.IngaTaxiApp.sSharedPreferences;
+import static com.inhataxi.activities.LoginActivity.userName;
+import static com.inhataxi.activities.LoginActivity.userNo;
+
+
+public class MapResultActivity extends BaseActivity implements MapView.MapViewEventListener, View.OnClickListener {
     private MapView mapView;
     private String name;
     private String address;
@@ -246,14 +264,69 @@ public class MapResultActivity extends AppCompatActivity implements MapView.MapV
                         buf.append((rnd.nextInt(10)));
                     }
                 }
-                Intent intent = new Intent(this, ChatActivity.class);
-                intent.putExtra("chatName", buf.toString());
-                intent.putExtra("userName", "me");
 
-                startActivity(intent);
+                //방 만들기 api
+                try {
+                    this.postMakeRoom(buf.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }
         //store map information
     }
+
+    void postMakeRoom(final String roomUrl) throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("userNo", userNo);
+        params.put("startLongitude", String.valueOf(inhaLon));
+        params.put("startLatitude", String.valueOf(inhaLat));
+        params.put("endLongitude", String.valueOf(y));
+        params.put("endLatitude", String.valueOf(x));
+        params.put("type", state);
+        params.put("url", roomUrl);
+
+        //로딩 다이얼로그
+        //mDialog.show();
+
+        final RetrofitInterface retrofitInterface = getRetrofit(this).create(RetrofitInterface.class);
+        retrofitInterface.postMakeRoom(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<MakeRoomResponse>() {
+            @Override
+            public void onResponse(@NonNull final Call<MakeRoomResponse> call,
+                                   @NonNull final Response<MakeRoomResponse> response) {
+//                hideProgressDialog();
+                MakeRoomResponse makeRoomResponse = response.body();
+                if (makeRoomResponse == null) {
+                    showCustomToast("응답 없음");
+                }
+
+                if (makeRoomResponse.getCode() == 100) {
+                    //채팅방 등록 성공
+                    showCustomToast(makeRoomResponse.getMessage());
+                    Intent intent = new Intent(MapResultActivity.this, ChatActivity.class);
+                    final String temp = roomUrl;
+                    intent.putExtra("chatName", temp);
+                    intent.putExtra("userName", userName);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    showCustomToast("회원가입 실패");
+                    Intent intent = new Intent(MapResultActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                //로딩 끝
+                //mDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull final Call<MakeRoomResponse> call,
+                                  @NonNull final Throwable throwable) {
+                //mDialog.dismiss();
+                showCustomToast("연결 실패");
+            }
+        });
+    }
+
 }
