@@ -38,12 +38,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.4'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
+    implementation 'com.google.firebase:firebase-database:16.0.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'// Server Network Lib
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'// Server Network Li
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'// Server Network Lib
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'// Server Network Lib
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'// Server Network Lib

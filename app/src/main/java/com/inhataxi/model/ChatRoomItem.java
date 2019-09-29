@@ -10,8 +10,9 @@ public class ChatRoomItem {
     private String departure;
     private String destination;
     private String imageUrl;
+    private String url;
 
-    public ChatRoomItem(String name, String dept, int count, String time, double distance, String departure, String destination, String imageUrl){
+    public ChatRoomItem(String name, String dept, int count, String time, double distance, String departure, String destination, String imageUrl, String url){
         this.name = name;
         this.dept = dept;
         this. count = count;
@@ -20,6 +21,7 @@ public class ChatRoomItem {
         this.departure = departure;
         this.destination = destination;
         this.imageUrl = imageUrl;
+        this.url = url;
     }
 
     public String getName() {
@@ -52,5 +54,9 @@ public class ChatRoomItem {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

@@ -1,6 +1,7 @@
 package com.inhataxi.activities.chat_room;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.inhataxi.R;
 import com.inhataxi.RetrofitInterface;
+import com.inhataxi.activities.ChatActivity;
 import com.inhataxi.model.ChatRoomItem;
 import com.inhataxi.response.ChattingRoomResponse;
 
@@ -33,6 +35,7 @@ import retrofit2.Response;
 
 import static com.inhataxi.IngaTaxiApp.MEDIA_TYPE_JSON;
 import static com.inhataxi.IngaTaxiApp.getRetrofitMethod;
+import static com.inhataxi.activities.LoginActivity.userName;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
 
@@ -92,7 +95,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         holder.tvChatRoomMaker.setText(chatRoomItem.getName());
         holder.tvChatRoomNum.setText(String.valueOf(chatRoomItem.getCount()));
         int distance = (int) (chatRoomItem.getDistance() * 1000);
-        holder.tvChatRoomDistance.setText(String.valueOf(distance) + " m");
+        holder.tvChatRoomDistance.setText(String.valueOf(distance).concat(" m"));
         holder.tvChatRoomDeparture.setText(chatRoomItem.getDeparture());
         holder.tvChatRoomDestination.setText(chatRoomItem.getDestination());
         String time = chatRoomItem.getTime().substring(14);
@@ -113,6 +116,11 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         holder.tvChatRoomJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(mContext, ChatActivity.class);
+                intent.putExtra("chatName", chatRoomItem.getUrl());
+                intent.putExtra("userName", userName);
+                mContext.startActivity(intent);
                 //채팅방 참가
             }
         });

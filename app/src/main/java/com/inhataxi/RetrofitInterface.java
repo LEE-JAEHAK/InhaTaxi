@@ -1,6 +1,8 @@
 package com.inhataxi;
 
 import com.inhataxi.response.ChattingRoomResponse;
+import com.inhataxi.response.LoginResponse;
+import com.inhataxi.response.MakeRoomResponse;
 import com.inhataxi.response.SignUpResponse;
 import com.inhataxi.response.SuperResponse;
 import com.inhataxi.response.TestDetailResponse;
@@ -41,6 +43,12 @@ public interface RetrofitInterface {
 
     @POST("/inha/signUp")
     Call<SignUpResponse> postSignUp(@Body RequestBody params);
+
+    @POST("/inha/room")
+    Call<MakeRoomResponse> postMakeRoom(@Body RequestBody params);
+
+    @POST("/inha/login")
+    Call<LoginResponse> postLogin(@Body RequestBody params);
 
 //    Mixed Example
 //    @POST("test/{v1}/{v2}")
