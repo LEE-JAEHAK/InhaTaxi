@@ -64,7 +64,9 @@
                         android:id="@+id/rl_go_school"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:onClick="onClick">
+                        android:onClick="onClick"
+                        android:padding="5dp"
+                        android:background="@drawable/list_chat_room_boarder">
 
                         <ImageView
                             android:id="@+id/iv_go_school"
@@ -110,7 +112,8 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:onClick="onClick"
-                        >
+                        android:padding="5dp"
+                        android:background="@drawable/list_chat_room_boarder">
 
                         <ImageView
                             android:id="@+id/iv_go_home"
@@ -166,7 +169,7 @@
                     app:slideDirection="right"
                     app:slideDuration="5000"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="20dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

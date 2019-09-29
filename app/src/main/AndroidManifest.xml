@@ -50,7 +50,7 @@
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.MapResultActivity" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
