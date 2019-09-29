@@ -22,6 +22,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+
         <activity android:name=".activities.ChatActivity">
 
         </activity>
@@ -35,8 +36,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/SwipeAnimationTheme"
             android:usesCleartextTraffic="true" />
-        <activity android:name=".activities.MapSearchActivity">
-        </activity>
+        <activity android:name=".activities.MapSearchActivity" />
         <activity android:name=".activities.GoogleCloudeVisionActivity" />
         <activity android:name=".activities.chat_room.ChatRoomActivity"></activity>
         <activity android:name=".activities.SelectActivity" />

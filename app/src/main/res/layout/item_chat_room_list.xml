@@ -2,6 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/list_chat_room_boarder"
     android:orientation="horizontal">
 
@@ -57,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="인하대학교"
-                android:textColor="#000000" />
+                android:textColor="#4a4a4a" />
 
         </LinearLayout>
 
@@ -80,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="주안역"
-                android:textColor="#000000" />
+                android:textColor="#4a4a4a" />
 
         </LinearLayout>
 
@@ -113,6 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:textColor="#4a4a4a"
                 android:text="45 m" />
 
         </LinearLayout>
