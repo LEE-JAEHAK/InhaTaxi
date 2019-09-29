@@ -51,7 +51,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         TextView tvChatRoomDistance;
         TextView tvChatRoomDeparture;
         TextView tvChatRoomDestination;
-        TextView tvChatRoomTime;
         TextView tvChatRoomJoin;
 
         ViewHolder(View itemView) {
@@ -63,7 +62,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             tvChatRoomDistance = itemView.findViewById(R.id.tv_chat_room_distance);
             tvChatRoomDeparture = itemView.findViewById(R.id.tv_chat_room_departure);
             tvChatRoomDestination = itemView.findViewById(R.id.tv_chat_room_destination);
-            tvChatRoomTime = itemView.findViewById(R.id.tv_chat_room_time);
             tvChatRoomJoin = itemView.findViewById(R.id.tv_chat_roomt_join);
 
         }
@@ -98,15 +96,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         holder.tvChatRoomDistance.setText(String.valueOf(distance).concat(" m"));
         holder.tvChatRoomDeparture.setText(chatRoomItem.getDeparture());
         holder.tvChatRoomDestination.setText(chatRoomItem.getDestination());
-        String time = chatRoomItem.getTime().substring(14);
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-//        Date date = simpleDateFormat.parse(chatRoomItem.getTime());
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(date);
-//        calendar.add(Calendar.HOUR, 3);
-//        calendar.add(Calendar.MINUTE, 30);
-
-        holder.tvChatRoomTime.setText(time);
 
         Glide.with(mContext).load(chatRoomItem.getImageUrl()).placeholder(R.drawable.ic_profile_basic).into(holder.ivChatRoomProfile);
 
