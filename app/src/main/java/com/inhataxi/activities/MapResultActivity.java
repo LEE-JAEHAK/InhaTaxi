@@ -289,7 +289,7 @@ public class MapResultActivity extends BaseActivity implements MapView.MapViewEv
             params.put("startLongitude", String.valueOf(y));
             params.put("startLatitude", String.valueOf(x));
             String[] temp = addrTv.getText().toString().split(" ");
-            params.put("startString", temp[0]);
+            params.put("startString", temp[0] + " " + temp[1]);
             params.put("endString", "인하대");
             params.put("type", state);
             params.put("url", roomUrl);
@@ -300,7 +300,7 @@ public class MapResultActivity extends BaseActivity implements MapView.MapViewEv
             params.put("endLongitude", String.valueOf(y));
             params.put("endLatitude", String.valueOf(x));
             String[] temp = addrTv.getText().toString().split(" ");
-            params.put("endString", temp[0]);
+            params.put("endString", temp[0] + " " + temp[1]);
             params.put("startString", "인하대");
             params.put("type", state);
             params.put("url", roomUrl);
